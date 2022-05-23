@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryPattern", "src\Re
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepositoryPattern.Test", "RepositoryPattern.Test", "{1C3E945D-92FF-46AF-ABA7-DF0B3655C9FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryPattern.UnitTest", "src\RepositoryPattern.Test\RepositoryPattern.UnitTest\RepositoryPattern.UnitTest.csproj", "{DDD9149D-FCDC-4357-87EF-48B8AF12394D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryPattern.UnitTest", "RepositoryPattern.UnitTest\RepositoryPattern.UnitTest.csproj", "{DDD9149D-FCDC-4357-87EF-48B8AF12394D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
