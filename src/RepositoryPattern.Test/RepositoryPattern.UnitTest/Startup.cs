@@ -36,6 +36,33 @@ namespace RepositoryPattern.UnitTest
                     options.MillisecondsOfWaitForGet = readingRange;
                     options.MillisecondsOfWaitForWhere = readingRange;
                 })
+                .PopulateWithRandomData(x => x.Id, 100)
+                .AddRepositoryPatternInMemoryStorage<Car, string>(options =>
+                {
+                    var customExceptions = new List<ExceptionOdds>
+                    {
+                        new ExceptionOdds()
+                        {
+                            Exception = new Exception("Normal Exception"),
+                            Percentage = 10.352
+                        },
+                        new ExceptionOdds()
+                        {
+                            Exception = new Exception("Big Exception"),
+                            Percentage = 49.1
+                        },
+                        new ExceptionOdds()
+                        {
+                            Exception = new Exception("Great Exception"),
+                            Percentage = 40.548
+                        }
+                    };
+                    options.ExceptionOddsForDelete.AddRange(customExceptions);
+                    options.ExceptionOddsForGet.AddRange(customExceptions);
+                    options.ExceptionOddsForInsert.AddRange(customExceptions);
+                    options.ExceptionOddsForUpdate.AddRange(customExceptions);
+                    options.ExceptionOddsForWhere.AddRange(customExceptions);
+                })
                 .Finalize()
                 .FinalizeWithoutDependencyInjection();
         }

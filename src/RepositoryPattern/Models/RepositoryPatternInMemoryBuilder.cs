@@ -10,8 +10,9 @@ namespace RepositoryPattern
         private readonly IServiceCollection _services;
         public RepositoryPatternInMemoryBuilder(IServiceCollection services)
             => _services = services;
-        public RepositoryPatternInMemoryBuilder<T, TKey> AddRepositoryPatternInMemoryStorage(Action<RepositoryPatternInMemorySettings> settings)
-            => _services!.AddRepositoryPatternInMemoryStorage<T, TKey>(settings);
+        public RepositoryPatternInMemoryBuilder<TNext, TNextKey> AddRepositoryPatternInMemoryStorage<TNext, TNextKey>(Action<RepositoryPatternInMemorySettings> settings)
+            where TNextKey : notnull
+            => _services!.AddRepositoryPatternInMemoryStorage<TNext, TNextKey>(settings);
         public RepositoryPatternInMemoryBuilder<T, TKey> PopulateWithRandomData(Expression<Func<T, TKey>> navigationKey, int numberOfElements = 100, int numberOfElementsWhenEnumerableIsFound = 10)
         {
             var nameOfKey = navigationKey.ToString().Split('.').Last();

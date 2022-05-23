@@ -10,55 +10,11 @@ namespace RepositoryPattern.Data
         {
             if (type == typeof(int) || type == typeof(int?))
             {
-                return new Random().Next(int.MinValue, int.MaxValue);
-            }
-            else if (type == typeof(long) || type == typeof(long?))
-            {
-                return new Random().NextInt64(long.MinValue, long.MaxValue);
+                return BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4));
             }
             else if (type == typeof(uint) || type == typeof(uint?))
             {
-                return new Random().NextInt64(uint.MinValue, uint.MaxValue);
-            }
-            else if (type == typeof(ulong) || type == typeof(ulong?))
-            {
-                return new Random().NextInt64(0, long.MaxValue);
-            }
-            else if (type == typeof(short) || type == typeof(short?))
-            {
-                return new Random().NextInt64(short.MinValue, short.MaxValue);
-            }
-            else if (type == typeof(ushort) || type == typeof(ushort?))
-            {
-                return new Random().NextInt64(ushort.MinValue, ushort.MaxValue);
-            }
-            else if (type == typeof(float) || type == typeof(float?))
-            {
-                return (float)(new Random().NextDouble() * float.MaxValue + float.MinValue);
-            }
-            else if (type == typeof(double) || type == typeof(double?))
-            {
-                return new Random().NextDouble() * double.MaxValue + double.MinValue;
-            }
-            else if (type == typeof(decimal) || type == typeof(decimal?))
-            {
-                return (decimal)new Random().NextDouble() * decimal.MaxValue + decimal.MinValue;
-            }
-            else if (type == typeof(string))
-            {
-                return $"{name}_{Guid.NewGuid()}";
-            }
-            else if (type == typeof(bool) || type == typeof(bool?))
-            {
-                return new Random().NextDouble() > 0.5D;
-            }
-            else if (type == typeof(char) || type == typeof(char?))
-            {
-                return (char)new Random().Next(0, 255);
-            }
-            else if (type == typeof(Guid) || type == typeof(Guid?))
-            {
-                return Guid.NewGuid();
+                return BitConverter.ToUInt32(RandomNumberGenerator.GetBytes(4));
             }
             else if (type == typeof(byte) || type == typeof(byte?))
             {
@@ -66,7 +22,59 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(sbyte) || type == typeof(sbyte?))
             {
-                return (sbyte)new Random().Next(0, 255);
+                return (sbyte)RandomNumberGenerator.GetBytes(1)[0];
+            }
+            else if (type == typeof(short) || type == typeof(short?))
+            {
+                return BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2));
+            }
+            else if (type == typeof(ushort) || type == typeof(ushort?))
+            {
+                return BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2));
+            }
+            else if (type == typeof(long) || type == typeof(long?))
+            {
+                return BitConverter.ToInt64(RandomNumberGenerator.GetBytes(8));
+            }
+            else if (type == typeof(ulong) || type == typeof(ulong?))
+            {
+                return BitConverter.ToUInt64(RandomNumberGenerator.GetBytes(8));
+            }
+            else if (type == typeof(nint) || type == typeof(nint?))
+            {
+                return (nint)BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2));
+            }
+            else if (type == typeof(nuint) || type == typeof(nuint?))
+            {
+                return (nuint)BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2));
+            }
+            else if (type == typeof(float) || type == typeof(float?))
+            {
+                return BitConverter.ToSingle(RandomNumberGenerator.GetBytes(4));
+            }
+            else if (type == typeof(double) || type == typeof(double?))
+            {
+                return BitConverter.ToDouble(RandomNumberGenerator.GetBytes(8));
+            }
+            else if (type == typeof(decimal) || type == typeof(decimal?))
+            {
+                return (decimal)BitConverter.ToSingle(RandomNumberGenerator.GetBytes(4));
+            }
+            else if (type == typeof(string))
+            {
+                return $"{name}_{Guid.NewGuid()}";
+            }
+            else if (type == typeof(bool) || type == typeof(bool?))
+            {
+                return RandomNumberGenerator.GetInt32(4) > 1;
+            }
+            else if (type == typeof(char) || type == typeof(char?))
+            {
+                return (char)RandomNumberGenerator.GetInt32(256);
+            }
+            else if (type == typeof(Guid) || type == typeof(Guid?))
+            {
+                return Guid.NewGuid();
             }
             else if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
@@ -74,7 +82,7 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(TimeSpan) || type == typeof(TimeSpan?))
             {
-                return TimeSpan.FromTicks(new Random().Next(int.MaxValue));
+                return TimeSpan.FromTicks(RandomNumberGenerator.GetInt32(200_000));
             }
             else if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
             {
@@ -82,7 +90,7 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(Range) || type == typeof(Range?))
             {
-                return new Range(new Index(new Random().Next(0, 100_000)), new Index(new Random().Next(200_000, 800_000)));
+                return new Range(new Index(RandomNumberGenerator.GetInt32(200_000)), new Index(RandomNumberGenerator.GetInt32(600_000) + 400_000));
             }
             else if (!type.IsArray && !type.IsInterface && !type.IsAbstract)
             {
