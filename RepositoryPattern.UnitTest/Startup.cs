@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Xunit.Abstractions;
 using Xunit.DependencyInjection;
 
-namespace Inps.Meeting.Tests
+namespace RepositoryPattern.UnitTest
 {
     public class Startup
     {
