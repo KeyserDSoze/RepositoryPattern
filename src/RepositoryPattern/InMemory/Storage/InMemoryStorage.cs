@@ -9,7 +9,7 @@ namespace RepositoryPattern
 
         public InMemoryStorage(RepositoryPatternInMemorySettingsFactory settings)
         {
-            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).Name];
+            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).FullName];
         }
         internal static readonly Dictionary<TKey, T> _values = new();
         private static int GetRandomNumber(Range range)

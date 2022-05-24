@@ -49,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Check(options.ExceptionOddsForUpdate);
             Check(options.ExceptionOddsForGet);
             Check(options.ExceptionOddsForDelete);
-            RepositoryPatternInMemorySettingsFactory.Instance.Settings.Add(typeof(IRepositoryPattern<T, TKey>).Name, options);
+            RepositoryPatternInMemorySettingsFactory.Instance.Settings.Add(typeof(IRepositoryPattern<T, TKey>).FullName, options);
             services.AddSingleton(RepositoryPatternInMemorySettingsFactory.Instance);
             services.AddSingleton<IRepositoryPattern<T, TKey>, InMemoryStorage<T, TKey>>();
             services.AddSingleton<ICommandPattern<T, TKey>, InMemoryStorage<T, TKey>>();
