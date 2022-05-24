@@ -1,100 +1,119 @@
-﻿using System.Collections;
+﻿using Fare;
+using RepositoryPattern.Utility;
+using System.Collections;
 using System.Reflection;
 using System.Security.Cryptography;
 
 namespace RepositoryPattern.Data
 {
-    internal static class RandomPopulationService
+    internal static class RandomPopulationService<T, TKey>
+        where TKey : notnull
     {
-        public static dynamic? Construct(Type type, string name, int numberOfEntities)
+        private static dynamic GetValue(Type type, string treeName, int index, Func<dynamic> create)
+        {
+            var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].RegexForValueCreation;
+            if (dictionary.ContainsKey(treeName))
+            {
+                var seed = index < dictionary[treeName].Length ?
+                    dictionary[treeName][index] : dictionary[treeName].Last();
+                if (!string.IsNullOrWhiteSpace(seed))
+                {
+                    var xeger = new Xeger(seed);
+                    var generatedString = xeger.Generate();
+                    return Convert.ChangeType(generatedString, type);
+                }
+            }
+            return create();
+        }
+        public static dynamic? Construct(Type type, string name, int numberOfEntities, string treeName, int forcedIndex = 0)
         {
             if (type == typeof(int) || type == typeof(int?))
             {
-                return BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)));
             }
             else if (type == typeof(uint) || type == typeof(uint?))
             {
-                return BitConverter.ToUInt32(RandomNumberGenerator.GetBytes(4));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToUInt32(RandomNumberGenerator.GetBytes(4)));
             }
             else if (type == typeof(byte) || type == typeof(byte?))
             {
-                return RandomNumberGenerator.GetBytes(1)[0];
+                return GetValue(type, treeName, forcedIndex, () => RandomNumberGenerator.GetBytes(1)[0]);
             }
             else if (type == typeof(sbyte) || type == typeof(sbyte?))
             {
-                return (sbyte)RandomNumberGenerator.GetBytes(1)[0];
+                return GetValue(type, treeName, forcedIndex, () => (sbyte)RandomNumberGenerator.GetBytes(1)[0]);
             }
             else if (type == typeof(short) || type == typeof(short?))
             {
-                return BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2)));
             }
             else if (type == typeof(ushort) || type == typeof(ushort?))
             {
-                return BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2)));
             }
             else if (type == typeof(long) || type == typeof(long?))
             {
-                return BitConverter.ToInt64(RandomNumberGenerator.GetBytes(8));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToInt64(RandomNumberGenerator.GetBytes(8)));
             }
             else if (type == typeof(ulong) || type == typeof(ulong?))
             {
-                return BitConverter.ToUInt64(RandomNumberGenerator.GetBytes(8));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToUInt64(RandomNumberGenerator.GetBytes(8)));
             }
             else if (type == typeof(nint) || type == typeof(nint?))
             {
-                return (nint)BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2));
+                return GetValue(type, treeName, forcedIndex, () => (nint)BitConverter.ToInt16(RandomNumberGenerator.GetBytes(2)));
             }
             else if (type == typeof(nuint) || type == typeof(nuint?))
             {
-                return (nuint)BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2));
+                return GetValue(type, treeName, forcedIndex, () => (nuint)BitConverter.ToUInt16(RandomNumberGenerator.GetBytes(2)));
             }
             else if (type == typeof(float) || type == typeof(float?))
             {
-                return BitConverter.ToSingle(RandomNumberGenerator.GetBytes(4));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToSingle(RandomNumberGenerator.GetBytes(4)));
             }
             else if (type == typeof(double) || type == typeof(double?))
             {
-                return BitConverter.ToDouble(RandomNumberGenerator.GetBytes(8));
+                return GetValue(type, treeName, forcedIndex, () => BitConverter.ToDouble(RandomNumberGenerator.GetBytes(8)));
             }
             else if (type == typeof(decimal) || type == typeof(decimal?))
             {
-                return new decimal(BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
+                return GetValue(type, treeName, forcedIndex, () => new decimal(BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
                     BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
                     BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
-                    RandomNumberGenerator.GetInt32(4) > 1,
-                    (byte)RandomNumberGenerator.GetInt32(29));
+                    RandomNumberGenerator.GetInt32(4) > forcedIndex,
+                    (byte)RandomNumberGenerator.GetInt32(29)));
             }
             else if (type == typeof(string))
             {
-                return $"{name}_{Guid.NewGuid()}";
+                return GetValue(type, treeName, forcedIndex, () => $"{name}_{Guid.NewGuid()}");
             }
             else if (type == typeof(bool) || type == typeof(bool?))
             {
-                return RandomNumberGenerator.GetInt32(4) > 1;
+                return GetValue(type, treeName, forcedIndex, () => RandomNumberGenerator.GetInt32(4) > 1);
             }
             else if (type == typeof(char) || type == typeof(char?))
             {
-                return (char)RandomNumberGenerator.GetInt32(256);
+                return GetValue(type, treeName, forcedIndex, () => (char)RandomNumberGenerator.GetInt32(256));
             }
             else if (type == typeof(Guid) || type == typeof(Guid?))
             {
-                return Guid.NewGuid();
+                return GetValue(type, treeName, forcedIndex, () => Guid.NewGuid());
             }
             else if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
-                return DateTime.UtcNow;
+                return GetValue(type, treeName, forcedIndex, () => DateTime.UtcNow);
             }
             else if (type == typeof(TimeSpan) || type == typeof(TimeSpan?))
             {
-                return TimeSpan.FromTicks(RandomNumberGenerator.GetInt32(200_000));
+                return GetValue(type, treeName, forcedIndex, () => TimeSpan.FromTicks(RandomNumberGenerator.GetInt32(200_000)));
             }
             else if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
             {
-                return DateTimeOffset.UtcNow;
+                return GetValue(type, treeName, forcedIndex, () => DateTimeOffset.UtcNow);
             }
             else if (type == typeof(Range) || type == typeof(Range?))
             {
-                return new Range(new Index(RandomNumberGenerator.GetInt32(200_000)), new Index(RandomNumberGenerator.GetInt32(600_000) + 400_000));
+                return GetValue(type, treeName, forcedIndex, () => new Range(new Index(RandomNumberGenerator.GetInt32(200_000)), new Index(RandomNumberGenerator.GetInt32(600_000) + 400_000)));
             }
             else if (!type.IsArray)
             {
@@ -107,8 +126,8 @@ namespace RepositoryPattern.Data
                     var entity = Activator.CreateInstance(dictionaryType)! as IDictionary;
                     for (int i = 0; i < 10; i++)
                     {
-                        var newKey = RandomPopulationService.Construct(type.GetGenericArguments().First(), "Key", 1);
-                        var newValue = RandomPopulationService.Construct(type.GetGenericArguments().Last(), "Value", numberOfEntities);
+                        var newKey = RandomPopulationService<T, TKey>.Construct(type.GetGenericArguments().First(), "Key", forcedIndex, treeName);
+                        var newValue = RandomPopulationService<T, TKey>.Construct(type.GetGenericArguments().Last(), "Value", numberOfEntities, treeName, 1);
                         entity!.Add(newKey, newValue);
                     }
                     return entity;
@@ -120,7 +139,7 @@ namespace RepositoryPattern.Data
                     var entity = Activator.CreateInstance(listType)! as IList;
                     for (int i = 0; i < 10; i++)
                     {
-                        var newValue = RandomPopulationService.Construct(type.GetGenericArguments().First(), string.Empty, numberOfEntities);
+                        var newValue = RandomPopulationService<T, TKey>.Construct(type.GetGenericArguments().First(), string.Empty, numberOfEntities, treeName);
                         entity!.Add(newValue);
                     }
                     return entity;
@@ -135,7 +154,7 @@ namespace RepositoryPattern.Data
                             var properties = type.GetProperties();
                             foreach (var property in properties)
                             {
-                                property.SetValue(entity, RandomPopulationService.Construct(property, numberOfEntities));
+                                property.SetValue(entity, RandomPopulationService<T, TKey>.Construct(property, numberOfEntities, treeName));
                             }
                         }
                         catch
@@ -150,15 +169,16 @@ namespace RepositoryPattern.Data
                 var entity = Activator.CreateInstance(type, numberOfEntities);
                 var valueType = type.GetElementType();
                 for (int i = 0; i < numberOfEntities; i++)
-                    (entity as dynamic)![i] = RandomPopulationService.Construct(valueType!, string.Empty, numberOfEntities);
+                    (entity as dynamic)![i] = RandomPopulationService<T, TKey>.Construct(valueType!, string.Empty, numberOfEntities, treeName);
                 return entity;
             }
             return default;
         }
-        public static dynamic? Construct(PropertyInfo propertyInfo, int numberOfEntities)
+        public static dynamic? Construct(PropertyInfo propertyInfo, int numberOfEntities, string treeName)
         {
             Type type = propertyInfo.PropertyType;
-            return Construct(type, propertyInfo.Name, numberOfEntities);
+            return Construct(type, propertyInfo.Name, numberOfEntities,
+                string.IsNullOrWhiteSpace(treeName) ? propertyInfo.Name : $"{treeName}.{propertyInfo.Name}");
         }
     }
 }

@@ -1,8 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Fare;
 using Microsoft.Extensions.DependencyInjection;
 using RepositoryPattern;
 using RepositoryPatternApp;
 using Rystem;
+using System.Text.RegularExpressions;
+
+string pattern = @"^([a-z]{4,16})@([a-z]{4,5})\.([a-z]{2,3})";
+var xeger = new Xeger(pattern);
+var generatedString = xeger.Generate();
+Console.WriteLine(generatedString);
 
 ServiceLocator
     .Create()
@@ -38,7 +45,12 @@ ServiceLocator
         options.ExceptionOddsForUpdate.AddRange(customExceptions);
         options.ExceptionOddsForWhere.AddRange(customExceptions);
     })
-    .PopulateWithRandomData(x => x.Key!, 20)
+    .PopulateWithRandomData()
+    .WithPattern(x => x.Key, "[a-z]{1,4}")
+    .WithPattern(x => x.Casualty!.Folder, "[a-z]{1,4}")
+    .WithPattern(x => x.Headers, "", "[a-z]{3,4}")
+    .WithPattern(x => x.Olaf, "[1-9]{3,4}")
+    .Populate(x => x.Key!, 20)
     .Finalize()
     .FinalizeWithoutDependencyInjection();
 

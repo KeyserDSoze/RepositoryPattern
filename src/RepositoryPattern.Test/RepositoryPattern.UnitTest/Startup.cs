@@ -36,7 +36,8 @@ namespace RepositoryPattern.UnitTest
                     options.MillisecondsOfWaitForGet = readingRange;
                     options.MillisecondsOfWaitForWhere = readingRange;
                 })
-                .PopulateWithRandomData(x => x.Id!, 100)
+                .PopulateWithRandomData()
+                .Populate(x => x.Id!, 100)
                 .AddRepositoryPatternInMemoryStorage<Car, string>(options =>
                 {
                     var customExceptions = new List<ExceptionOdds>
@@ -64,7 +65,8 @@ namespace RepositoryPattern.UnitTest
                     options.ExceptionOddsForWhere.AddRange(customExceptions);
                 })
                 .AddRepositoryPatternInMemoryStorageWithStringKey<PopulationTest>()
-                .PopulateWithRandomData(x => x.P)
+                .PopulateWithRandomData()
+                .Populate(x => x.P)
                 .Finalize()
                 .FinalizeWithoutDependencyInjection();
         }
