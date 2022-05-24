@@ -5,11 +5,11 @@ namespace RepositoryPattern
     internal class InMemoryStorage<T, TKey> : IRepositoryPattern<T, TKey>
         where TKey : notnull
     {
-        private readonly RepositoryPatternInMemorySettings _settings;
+        private readonly RepositoryPatternBehaviorSettings _settings;
 
-        public InMemoryStorage(RepositoryPatternSettingsFactory settings)
+        public InMemoryStorage(RepositoryPatternInMemorySettingsFactory settings)
         {
-            _settings = settings.Settings[nameof(IRepositoryPattern<T, TKey>)];
+            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).Name];
         }
         internal static readonly Dictionary<TKey, T> _values = new();
         private static int GetRandomNumber(Range range)

@@ -1,6 +1,6 @@
 ﻿namespace RepositoryPattern
 {
-    public class RepositoryPatternInMemorySettings
+    public class RepositoryPatternBehaviorSettings
     {
         public Range MillisecondsOfWaitForDelete { get; set; }
         public Range MillisecondsOfWaitForInsert { get; set; }

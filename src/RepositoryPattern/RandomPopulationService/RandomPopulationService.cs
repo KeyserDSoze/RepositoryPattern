@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace RepositoryPattern.Data
 {
-    internal static class Creator
+    internal static class RandomPopulationService
     {
         public static dynamic Construct(Type type, string name, int numberOfEntities)
         {
@@ -103,8 +103,8 @@ namespace RepositoryPattern.Data
                     var entity = Activator.CreateInstance(dictionaryType)! as IDictionary;
                     for (int i = 0; i < 10; i++)
                     {
-                        var newKey = Creator.Construct(type.GetGenericArguments().First(), "Key", 1);
-                        var newValue = Creator.Construct(type.GetGenericArguments().Last(), "Value", numberOfEntities);
+                        var newKey = RandomPopulationService.Construct(type.GetGenericArguments().First(), "Key", 1);
+                        var newValue = RandomPopulationService.Construct(type.GetGenericArguments().Last(), "Value", numberOfEntities);
                         entity!.Add(newKey, newValue);
                     }
                 }
@@ -115,7 +115,7 @@ namespace RepositoryPattern.Data
                     var entity = Activator.CreateInstance(listType)! as IList;
                     for (int i = 0; i < 10; i++)
                     {
-                        var newValue = Creator.Construct(type.GetGenericArguments().First(), string.Empty, numberOfEntities);
+                        var newValue = RandomPopulationService.Construct(type.GetGenericArguments().First(), string.Empty, numberOfEntities);
                         entity!.Add(newValue);
                     }
                 }
@@ -127,7 +127,7 @@ namespace RepositoryPattern.Data
                         var properties = type.GetProperties();
                         foreach (var property in properties)
                         {
-                            property.SetValue(entity, Creator.Construct(property, numberOfEntities));
+                            property.SetValue(entity, RandomPopulationService.Construct(property, numberOfEntities));
                         }
                     }
                     catch
@@ -142,7 +142,7 @@ namespace RepositoryPattern.Data
                 var valueType = type.GetElementType();
                 for (int i = 0; i < numberOfEntities; i++)
                 {
-                    ((dynamic)entity)[i] = Creator.Construct(valueType, string.Empty, numberOfEntities);
+                    ((dynamic)entity)[i] = RandomPopulationService.Construct(valueType, string.Empty, numberOfEntities);
                 }
             }
             return default;

@@ -10,7 +10,7 @@ namespace RepositoryPattern
         private readonly IServiceCollection _services;
         public RepositoryPatternInMemoryBuilder(IServiceCollection services)
             => _services = services;
-        public RepositoryPatternInMemoryBuilder<TNext, TNextKey> AddRepositoryPatternInMemoryStorage<TNext, TNextKey>(Action<RepositoryPatternInMemorySettings> settings)
+        public RepositoryPatternInMemoryBuilder<TNext, TNextKey> AddRepositoryPatternInMemoryStorage<TNext, TNextKey>(Action<RepositoryPatternBehaviorSettings> settings)
             where TNextKey : notnull
             => _services!.AddRepositoryPatternInMemoryStorage<TNext, TNextKey>(settings);
         public RepositoryPatternInMemoryBuilder<T, TKey> PopulateWithRandomData(Expression<Func<T, TKey>> navigationKey, int numberOfElements = 100, int numberOfElementsWhenEnumerableIsFound = 10)
@@ -22,7 +22,7 @@ namespace RepositoryPattern
                 var entity = Activator.CreateInstance<T>();
                 foreach (var property in properties)
                 {
-                    property.SetValue(entity, Creator.Construct(property, numberOfElementsWhenEnumerableIsFound));
+                    property.SetValue(entity, RandomPopulationService.Construct(property, numberOfElementsWhenEnumerableIsFound));
                 }
                 var key = properties.First(x => x.Name == nameOfKey).GetValue(entity);
                 InMemoryStorage<T, TKey>._values.Add((TKey)key!, entity);
