@@ -36,7 +36,7 @@ namespace RepositoryPattern.UnitTest
                     options.MillisecondsOfWaitForGet = readingRange;
                     options.MillisecondsOfWaitForWhere = readingRange;
                 })
-                .PopulateWithRandomData(x => x.Id, 100)
+                .PopulateWithRandomData(x => x.Id!, 100)
                 .AddRepositoryPatternInMemoryStorage<Car, string>(options =>
                 {
                     var customExceptions = new List<ExceptionOdds>

@@ -17,7 +17,7 @@ namespace RepositoryPattern.UnitTest
         {
             try
             {
-                var cars = await _car.ToListAsync();
+                var cars = await _car.QueryAsync();
                 Assert.True(false);
             }
             catch (Exception ex)

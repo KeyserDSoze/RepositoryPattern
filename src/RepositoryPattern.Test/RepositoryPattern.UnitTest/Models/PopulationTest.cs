@@ -32,7 +32,10 @@ namespace RepositoryPattern.UnitTest.Models
         public double? NN { get; set; }
         public decimal O { get; set; }
         public decimal? OO { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string P { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public string? PP { get; set; }
         public bool Q { get; set; }
         public bool? QQ { get; set; }
         public char R { get; set; }
@@ -47,5 +50,14 @@ namespace RepositoryPattern.UnitTest.Models
         public DateTimeOffset? VV { get; set; }
         public Range Z { get; set; }
         public Range? ZZ { get; set; }
+        public IEnumerable<InnerPopulation>? X { get; set; }
+        public IDictionary<string, InnerPopulation>? Y { get; set; }
+        public InnerPopulation[]? W { get; set; }
+        public ICollection<InnerPopulation>? J { get; set; }
+    }
+    public class InnerPopulation
+    {
+        public string? A { get; set; }
+        public int? B { get; set; }
     }
 }

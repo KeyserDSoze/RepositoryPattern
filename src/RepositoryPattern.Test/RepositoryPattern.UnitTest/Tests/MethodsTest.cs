@@ -14,7 +14,7 @@ namespace RepositoryPattern.UnitTest
         [Fact]
         public async Task TestAsync()
         {
-            var users = await _user.ToListAsync();
+            var users = await _user.QueryAsync();
             Assert.True(users.Count == 100);
         }
     }

@@ -16,7 +16,7 @@ namespace RepositoryPattern.UnitTest
         [Fact]
         public async Task TestAsync()
         {
-            var all = await _test.ToListAsync();
+            var all = await _test.QueryAsync();
             var theFirst = all.First();
             Assert.NotEqual(0, theFirst.A);
             Assert.NotNull(theFirst.AA);
@@ -43,6 +43,7 @@ namespace RepositoryPattern.UnitTest
             Assert.NotEqual((decimal)0, theFirst.O);
             Assert.NotNull(theFirst.OO);
             Assert.NotNull(theFirst.P);
+            Assert.NotNull(theFirst.PP);
             Assert.NotNull(theFirst.QQ);
             Assert.NotEqual((char)0, theFirst.R);
             Assert.NotNull(theFirst.RR);
@@ -56,6 +57,14 @@ namespace RepositoryPattern.UnitTest
             Assert.NotNull(theFirst.VV);
             Assert.NotEqual(new Range(), theFirst.Z);
             Assert.NotNull(theFirst.ZZ);
+            Assert.NotNull(theFirst.X);
+            Assert.Equal(10, theFirst?.X?.Count());
+            Assert.NotNull(theFirst?.Y);
+            Assert.Equal(10, theFirst?.Y?.Count);
+            Assert.NotNull(theFirst?.W);
+            Assert.Equal(10, theFirst?.W?.Count());
+            Assert.NotNull(theFirst?.J);
+            Assert.Equal(10, theFirst?.J?.Count);
         }
     }
 }

@@ -38,7 +38,7 @@ ServiceLocator
         options.ExceptionOddsForUpdate.AddRange(customExceptions);
         options.ExceptionOddsForWhere.AddRange(customExceptions);
     })
-    .PopulateWithRandomData(x => x.Key, 20)
+    .PopulateWithRandomData(x => x.Key!, 20)
     .Finalize()
     .FinalizeWithoutDependencyInjection();
 
@@ -48,5 +48,5 @@ await storage.InsertAsync("aaa", new());
 await storage.UpdateAsync("aaa", new());
 var q = await storage.GetAsync("aaa");
 await storage.DeleteAsync("aaa");
-var all = await storage.ToListAsync();
+var all = await storage.QueryAsync();
 var olaf = string.Empty;

@@ -9,7 +9,7 @@ namespace RepositoryPattern
 
         public InMemoryStorage(RepositoryPatternInMemorySettingsFactory settings)
         {
-            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).FullName];
+            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).FullName!];
         }
         internal static readonly Dictionary<TKey, T> _values = new();
         private static int GetRandomNumber(Range range)
@@ -92,7 +92,7 @@ namespace RepositoryPattern
                 return false;
         }
 
-        public async Task<List<T>> ToListAsync(Func<T, bool>? predicate = null)
+        public async Task<List<T>> QueryAsync(Func<T, bool>? predicate = null, int? top = 0, int? skip = 0)
         {
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForWhere));
             var exception = GetException(_settings.ExceptionOddsForWhere);

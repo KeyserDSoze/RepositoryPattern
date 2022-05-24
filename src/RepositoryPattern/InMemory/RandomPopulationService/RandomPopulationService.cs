@@ -6,7 +6,7 @@ namespace RepositoryPattern.Data
 {
     internal static class RandomPopulationService
     {
-        public static dynamic Construct(Type type, string name, int numberOfEntities)
+        public static dynamic? Construct(Type type, string name, int numberOfEntities)
         {
             if (type == typeof(int) || type == typeof(int?))
             {
@@ -96,10 +96,10 @@ namespace RepositoryPattern.Data
             {
                 return new Range(new Index(RandomNumberGenerator.GetInt32(200_000)), new Index(RandomNumberGenerator.GetInt32(600_000) + 400_000));
             }
-            else if (!type.IsArray && !type.IsInterface && !type.IsAbstract)
+            else if (!type.IsArray)
             {
                 var interfaces = type.GetInterfaces();
-                if (interfaces.Any(x => x.Name.Contains("IDictionary`2")))
+                if (type.Name.Contains("IDictionary`2") || interfaces.Any(x => x.Name.Contains("IDictionary`2")))
                 {
                     var keyType = type.GetGenericArguments().First();
                     var valueType = type.GetGenericArguments().Last();
@@ -111,8 +111,9 @@ namespace RepositoryPattern.Data
                         var newValue = RandomPopulationService.Construct(type.GetGenericArguments().Last(), "Value", numberOfEntities);
                         entity!.Add(newKey, newValue);
                     }
+                    return entity;
                 }
-                else if (interfaces.Any(x => x.Name.Contains("IEnumerable`1")))
+                else if (type.Name.Contains("IEnumerable`1") || interfaces.Any(x => x.Name.Contains("IEnumerable`1")))
                 {
                     var valueType = type.GetGenericArguments().First();
                     var listType = typeof(List<>).MakeGenericType(valueType);
@@ -122,22 +123,26 @@ namespace RepositoryPattern.Data
                         var newValue = RandomPopulationService.Construct(type.GetGenericArguments().First(), string.Empty, numberOfEntities);
                         entity!.Add(newValue);
                     }
+                    return entity;
                 }
                 else
                 {
-                    var entity = Activator.CreateInstance(type);
-                    try
+                    if (!type.IsInterface && !type.IsAbstract)
                     {
-                        var properties = type.GetProperties();
-                        foreach (var property in properties)
+                        var entity = Activator.CreateInstance(type);
+                        try
                         {
-                            property.SetValue(entity, RandomPopulationService.Construct(property, numberOfEntities));
+                            var properties = type.GetProperties();
+                            foreach (var property in properties)
+                            {
+                                property.SetValue(entity, RandomPopulationService.Construct(property, numberOfEntities));
+                            }
                         }
+                        catch
+                        {
+                        }
+                        return entity;
                     }
-                    catch
-                    {
-                    }
-                    return entity;
                 }
             }
             else if (type.IsArray)
@@ -145,13 +150,12 @@ namespace RepositoryPattern.Data
                 var entity = Activator.CreateInstance(type, numberOfEntities);
                 var valueType = type.GetElementType();
                 for (int i = 0; i < numberOfEntities; i++)
-                {
-                    ((dynamic)entity)[i] = RandomPopulationService.Construct(valueType, string.Empty, numberOfEntities);
-                }
+                    (entity as dynamic)![i] = RandomPopulationService.Construct(valueType!, string.Empty, numberOfEntities);
+                return entity;
             }
             return default;
         }
-        public static dynamic Construct(PropertyInfo propertyInfo, int numberOfEntities)
+        public static dynamic? Construct(PropertyInfo propertyInfo, int numberOfEntities)
         {
             Type type = propertyInfo.PropertyType;
             return Construct(type, propertyInfo.Name, numberOfEntities);
