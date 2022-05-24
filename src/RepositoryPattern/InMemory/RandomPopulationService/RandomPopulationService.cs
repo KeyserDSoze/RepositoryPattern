@@ -58,7 +58,11 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(decimal) || type == typeof(decimal?))
             {
-                return (decimal)BitConverter.ToSingle(RandomNumberGenerator.GetBytes(4));
+                return new decimal(BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
+                    BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
+                    BitConverter.ToInt32(RandomNumberGenerator.GetBytes(4)),
+                    RandomNumberGenerator.GetInt32(4) > 1,
+                    (byte)RandomNumberGenerator.GetInt32(29));
             }
             else if (type == typeof(string))
             {

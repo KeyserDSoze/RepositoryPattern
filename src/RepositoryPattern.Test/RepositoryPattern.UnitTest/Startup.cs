@@ -63,6 +63,8 @@ namespace RepositoryPattern.UnitTest
                     options.ExceptionOddsForUpdate.AddRange(customExceptions);
                     options.ExceptionOddsForWhere.AddRange(customExceptions);
                 })
+                .AddRepositoryPatternInMemoryStorageWithStringKey<PopulationTest>()
+                .PopulateWithRandomData(x => x.P)
                 .Finalize()
                 .FinalizeWithoutDependencyInjection();
         }

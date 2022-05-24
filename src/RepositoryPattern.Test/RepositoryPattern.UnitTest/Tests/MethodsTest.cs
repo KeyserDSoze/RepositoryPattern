@@ -4,10 +4,10 @@ using Xunit;
 
 namespace RepositoryPattern.UnitTest
 {
-    public class RandomDataCreationTest
+    public class MethodsTest
     {
         private readonly IRepositoryPattern<User, string> _user;
-        public RandomDataCreationTest(IRepositoryPattern<User, string> user)
+        public MethodsTest(IRepositoryPattern<User, string> user)
         {
             _user = user;
         }

@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 => services.AddQueryPattern<T, string, TStorage>(serviceLifetime);
         public static RepositoryPatternInMemoryBuilder<T, string> AddRepositoryPatternInMemoryStorageWithStringKey<T>(
             this IServiceCollection services,
-            Action<RepositoryPatternBehaviorSettings> settings)
+            Action<RepositoryPatternBehaviorSettings>? settings = default)
         => services.AddRepositoryPatternInMemoryStorage<T, string>(settings);
     }
 }
