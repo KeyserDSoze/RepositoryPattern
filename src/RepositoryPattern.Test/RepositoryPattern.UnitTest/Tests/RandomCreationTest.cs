@@ -1,6 +1,7 @@
 using RepositoryPattern.UnitTest.Models;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -66,6 +67,17 @@ namespace RepositoryPattern.UnitTest
             Assert.Equal(10, theFirst?.W?.Count());
             Assert.NotNull(theFirst?.J);
             Assert.Equal(10, theFirst?.J?.Count);
+            var regex = new Regex("[a-z]{4,5}");
+            foreach (var check in theFirst!.J!)
+            {
+                Assert.Equal(check.A, 
+                    regex.Matches(check!.A!).OrderByDescending(x => x.Length).First().Value);
+            }
+            foreach (var check in theFirst!.Y!)
+            {
+                Assert.Equal(check.Value.A,
+                    regex.Matches(check!.Value!.A!).OrderByDescending(x => x.Length).First().Value);
+            }
         }
     }
 }

@@ -18,7 +18,10 @@ namespace RepositoryPattern
         }
         public RepositoryPatternInMemoryRegexBuilder<T, TKey> WithPattern<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, params string[] regex)
         {
-            string nameOfProperty = string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1));
+            string nameOfProperty = string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
+                .Replace("First().Value.", string.Empty)
+                .Replace("First().Key.", string.Empty)
+                .Replace("First().", string.Empty);
             var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].RegexForValueCreation;
             if (dictionary.ContainsKey(nameOfProperty))
                 dictionary[nameOfProperty] = regex;

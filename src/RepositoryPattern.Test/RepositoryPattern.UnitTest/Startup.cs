@@ -1,15 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RepositoryPattern;
 using RepositoryPattern.UnitTest.Models;
 using Rystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
-using Xunit.DependencyInjection;
 
 namespace RepositoryPattern.UnitTest
 {
@@ -66,6 +61,8 @@ namespace RepositoryPattern.UnitTest
                 })
                 .AddRepositoryPatternInMemoryStorageWithStringKey<PopulationTest>()
                 .PopulateWithRandomData()
+                .WithPattern(x => x.J!.First().A, "[a-z]{4,5}")
+                .WithPattern(x => x.Y!.First().Value.A, "[a-z]{4,5}")
                 .Populate(x => x.P)
                 .Finalize()
                 .FinalizeWithoutDependencyInjection();
