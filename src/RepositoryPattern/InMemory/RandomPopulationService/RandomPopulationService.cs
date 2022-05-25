@@ -20,7 +20,14 @@ namespace RepositoryPattern.Data
                 {
                     var xeger = new Xeger(seed);
                     var generatedString = xeger.Generate();
-                    return Convert.ChangeType(generatedString, type);
+                    if (type.Name.Contains("Nullable`1"))
+                        type = type.GenericTypeArguments[0];
+                    if (type == typeof(Guid))
+                        return Guid.Parse(generatedString);
+                    else if(type == typeof(DateTimeOffset))
+                        return DateTimeOffset.Parse(generatedString);
+                    else
+                        return Convert.ChangeType(generatedString, type);
                 }
             }
             return create();
@@ -105,7 +112,7 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(TimeSpan) || type == typeof(TimeSpan?))
             {
-                return GetValue(type, treeName, forcedIndex, () => TimeSpan.FromTicks(RandomNumberGenerator.GetInt32(200_000)));
+                return TimeSpan.FromTicks(GetValue(typeof(long), treeName, forcedIndex, () => RandomNumberGenerator.GetInt32(200_000)));
             }
             else if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
             {
@@ -113,7 +120,21 @@ namespace RepositoryPattern.Data
             }
             else if (type == typeof(Range) || type == typeof(Range?))
             {
-                return GetValue(type, treeName, forcedIndex, () => new Range(new Index(RandomNumberGenerator.GetInt32(200_000)), new Index(RandomNumberGenerator.GetInt32(600_000) + 400_000)));
+                int firstNumber = GetValue(typeof(int), treeName, forcedIndex, () => RandomPopulationService<T, TKey>.Construct(typeof(int), "X", forcedIndex, treeName)!);
+                int secondNumber = GetValue(typeof(int), treeName, forcedIndex, () => RandomPopulationService<T, TKey>.Construct(typeof(int), "Y", forcedIndex, treeName, 1)!);
+                if (firstNumber < 0)
+                    firstNumber *= -1;
+                if (secondNumber < 0)
+                    secondNumber *= -1;
+                if (firstNumber > secondNumber)
+                {
+                    var lied = firstNumber;
+                    firstNumber = secondNumber;
+                    secondNumber = lied;
+                }
+                if (firstNumber == secondNumber)
+                    secondNumber++;
+                return new Range(new Index(firstNumber), new Index(secondNumber));
             }
             else if (!type.IsArray)
             {

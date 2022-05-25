@@ -29,6 +29,19 @@ namespace RepositoryPattern
                 dictionary.Add(nameOfProperty, regex);
             return this;
         }
+        public RepositoryPatternInMemoryRegexBuilder<T, TKey> WithPattern<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, Func<dynamic> creator)
+        {
+            string nameOfProperty = string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
+                .Replace("First().Value.", string.Empty)
+                .Replace("First().Key.", string.Empty)
+                .Replace("First().", string.Empty);
+            var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].DelegatedMethodForValueCreation;
+            if (dictionary.ContainsKey(nameOfProperty))
+                dictionary[nameOfProperty] = creator;
+            else
+                dictionary.Add(nameOfProperty, creator);
+            return this;
+        }
         public RepositoryPatternInMemoryBuilder<T, TKey> Populate(Expression<Func<T, TKey>> navigationKey, int numberOfElements = 100, int numberOfElementsWhenEnumerableIsFound = 10)
         {
             var nameOfKey = navigationKey.ToString().Split('.').Last();

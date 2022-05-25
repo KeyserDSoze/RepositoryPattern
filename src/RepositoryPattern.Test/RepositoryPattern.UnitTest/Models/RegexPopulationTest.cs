@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RepositoryPattern.UnitTest.Models
 {
-    public class PopulationTest
+    public class RegexPopulationTest
     {
         public int A { get; set; }
         public int? AA { get; set; }
@@ -47,12 +47,12 @@ namespace RepositoryPattern.UnitTest.Models
         public DateTimeOffset? VV { get; set; }
         public Range Z { get; set; }
         public Range? ZZ { get; set; }
-        public IEnumerable<InnerPopulation>? X { get; set; }
-        public IDictionary<string, InnerPopulation>? Y { get; set; }
-        public InnerPopulation[]? W { get; set; }
-        public ICollection<InnerPopulation>? J { get; set; }
+        public IEnumerable<RegexInnerPopulationTest>? X { get; set; }
+        public IDictionary<string, RegexInnerPopulationTest>? Y { get; set; }
+        public RegexInnerPopulationTest[]? W { get; set; }
+        public ICollection<RegexInnerPopulationTest>? J { get; set; }
     }
-    public class InnerPopulation
+    public class RegexInnerPopulationTest
     {
         public string? A { get; set; }
         public int? B { get; set; }

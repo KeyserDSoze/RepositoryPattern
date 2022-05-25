@@ -6,7 +6,7 @@ using RepositoryPatternApp;
 using Rystem;
 using System.Text.RegularExpressions;
 
-string pattern = @"^([a-z]{4,16})@([a-z]{4,5})\.([a-z]{2,3})";
+string pattern = @"(?:2018|2019|2020|2021|2022)/(?:10|11|12)/(?:06|07|08) (00:00:00)";
 var xeger = new Xeger(pattern);
 var generatedString = xeger.Generate();
 Console.WriteLine(generatedString);
