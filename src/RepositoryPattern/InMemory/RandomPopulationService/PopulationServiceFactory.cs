@@ -5,6 +5,7 @@ namespace RepositoryPattern.Data
     internal class PopulationServiceFactory<T, TKey>
         where TKey : notnull
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "It needed for DI")]
         public IPopulationService GetService(Type type, IRandomPopulationService populationService, string treeName)
         {
             var delegatedDictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].DelegatedMethodForValueCreation;

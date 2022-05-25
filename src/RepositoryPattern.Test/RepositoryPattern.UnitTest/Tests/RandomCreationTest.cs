@@ -71,7 +71,7 @@ namespace RepositoryPattern.UnitTest
             Assert.NotNull(theFirst?.Y);
             Assert.Equal(10, theFirst?.Y?.Count);
             Assert.NotNull(theFirst?.W);
-            Assert.Equal(10, theFirst?.W?.Count());
+            Assert.Equal(10, theFirst?.W?.Length);
             Assert.NotNull(theFirst?.J);
             Assert.Equal(10, theFirst?.J?.Count);
             var regex = new Regex("[a-z]{4,5}");
@@ -138,7 +138,7 @@ namespace RepositoryPattern.UnitTest
             Assert.NotNull(theFirst?.Y);
             Assert.Equal(8, theFirst?.Y?.Count);
             Assert.NotNull(theFirst?.W);
-            Assert.Equal(8, theFirst?.W?.Count());
+            Assert.Equal(8, theFirst?.W?.Length);
             Assert.NotNull(theFirst?.J);
             Assert.Equal(8, theFirst?.J?.Count);
             var regex = new Regex("[a-z]{4,5}");
@@ -220,7 +220,7 @@ namespace RepositoryPattern.UnitTest
             Assert.NotNull(theFirst?.Y);
             Assert.Equal(10, theFirst?.Y?.Count);
             Assert.NotNull(theFirst?.W);
-            Assert.Equal(10, theFirst?.W?.Count());
+            Assert.Equal(10, theFirst?.W?.Length);
             Assert.NotNull(theFirst?.J);
             Assert.Equal(10, theFirst?.J?.Count);
             int counter = 0;

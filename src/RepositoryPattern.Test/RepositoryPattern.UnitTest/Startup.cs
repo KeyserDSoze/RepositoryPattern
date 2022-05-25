@@ -10,6 +10,7 @@ namespace RepositoryPattern.UnitTest
 {
     public class Startup
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "It needed for DI")]
         public void ConfigureServices(IServiceCollection services)
         {
             IConfiguration configuration = new ConfigurationBuilder()
@@ -64,7 +65,7 @@ namespace RepositoryPattern.UnitTest
                 .WithPattern(x => x.J!.First().A, "[a-z]{4,5}")
                 .WithPattern(x => x.Y!.First().Value.A, "[a-z]{4,5}")
                 .WithImplementation(x => x.I, typeof(MyInnerInterfaceImplementation))
-                .WithPattern(x => x.I.A, "[a-z]{4,5}")
+                .WithPattern(x => x.I!.A!, "[a-z]{4,5}")
                 .WithImplementation<IInnerInterface, MyInnerInterfaceImplementation>(x => x.I!)
                 .Populate(x => x.P)
                 .AddRepositoryPatternInMemoryStorageWithStringKey<RegexPopulationTest>()

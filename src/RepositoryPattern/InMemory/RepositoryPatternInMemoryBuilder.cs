@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RepositoryPattern.Data;
-using System.Linq.Expressions;
 
 namespace RepositoryPattern
 {

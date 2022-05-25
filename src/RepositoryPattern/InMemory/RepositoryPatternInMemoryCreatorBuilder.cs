@@ -16,7 +16,7 @@ namespace RepositoryPattern
             _services = services;
             _builder = builder;
         }
-        private string GetNameOfProperty<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath)
+        private static string GetNameOfProperty<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath)
             => string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
                 .Replace("First().Value.", "Value.")
                 .Replace("First().Key.", "Key.")
