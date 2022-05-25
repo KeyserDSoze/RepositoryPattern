@@ -8,6 +8,7 @@ namespace RepositoryPatternApp
 {
     internal class Solomon
     {
+        public Range Z { get; set; }
         public string? Key { get; set; }
         public string? Value { get; set; }
         public string? Folder { get; set; }

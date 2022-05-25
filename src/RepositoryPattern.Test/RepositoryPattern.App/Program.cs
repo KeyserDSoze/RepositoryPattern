@@ -15,41 +15,42 @@ ServiceLocator
     .Create()
     .AddRepositoryPatternInMemoryStorage<Solomon, string>(options =>
     {
-        var customRange = new Range(1000, 2000);
-        options.MillisecondsOfWaitForDelete = customRange;
-        options.MillisecondsOfWaitForInsert = customRange;
-        options.MillisecondsOfWaitForUpdate = customRange;
-        options.MillisecondsOfWaitForGet = customRange;
-        options.MillisecondsOfWaitForWhere = new Range(3000, 7000);
-        var customExceptions = new List<ExceptionOdds>
-        {
-            new ExceptionOdds()
-            {
-                Exception = new Exception(),
-                Percentage = 0.45
-            },
-            new ExceptionOdds()
-            {
-                Exception = new Exception("Big Exception"),
-                Percentage = 0.1
-            },
-            new ExceptionOdds()
-            {
-                Exception = new Exception("Great Exception"),
-                Percentage = 0.548
-            }
-        };
-        options.ExceptionOddsForDelete.AddRange(customExceptions);
-        options.ExceptionOddsForGet.AddRange(customExceptions);
-        options.ExceptionOddsForInsert.AddRange(customExceptions);
-        options.ExceptionOddsForUpdate.AddRange(customExceptions);
-        options.ExceptionOddsForWhere.AddRange(customExceptions);
+        //var customRange = new Range(1000, 2000);
+        //options.MillisecondsOfWaitForDelete = customRange;
+        //options.MillisecondsOfWaitForInsert = customRange;
+        //options.MillisecondsOfWaitForUpdate = customRange;
+        //options.MillisecondsOfWaitForGet = customRange;
+        //options.MillisecondsOfWaitForWhere = new Range(3000, 7000);
+        //var customExceptions = new List<ExceptionOdds>
+        //{
+        //    new ExceptionOdds()
+        //    {
+        //        Exception = new Exception(),
+        //        Percentage = 0.45
+        //    },
+        //    new ExceptionOdds()
+        //    {
+        //        Exception = new Exception("Big Exception"),
+        //        Percentage = 0.1
+        //    },
+        //    new ExceptionOdds()
+        //    {
+        //        Exception = new Exception("Great Exception"),
+        //        Percentage = 0.548
+        //    }
+        //};
+        //options.ExceptionOddsForDelete.AddRange(customExceptions);
+        //options.ExceptionOddsForGet.AddRange(customExceptions);
+        //options.ExceptionOddsForInsert.AddRange(customExceptions);
+        //options.ExceptionOddsForUpdate.AddRange(customExceptions);
+        //options.ExceptionOddsForWhere.AddRange(customExceptions);
     })
     .PopulateWithRandomData()
-    .WithPattern(x => x.Key, "[a-z]{1,4}")
+    .WithPattern(x => x.Key, "[a-z]{4,16}")
     .WithPattern(x => x.Casualty!.Folder, "[a-z]{1,4}")
     .WithPattern(x => x.Headers, "", "[a-z]{3,4}")
     .WithPattern(x => x.Olaf, "[1-9]{3,4}")
+    .WithValue(x => x.Z, () => new Range(new Index(1), new Index(2)))
     .Populate(x => x.Key!, 20)
     .Finalize()
     .FinalizeWithoutDependencyInjection();

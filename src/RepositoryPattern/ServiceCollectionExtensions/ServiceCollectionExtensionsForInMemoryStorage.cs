@@ -21,6 +21,31 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IRepositoryPattern<T, TKey>, InMemoryStorage<T, TKey>>();
             services.AddSingleton<ICommandPattern<T, TKey>, InMemoryStorage<T, TKey>>();
             services.AddSingleton<IQueryPattern<T, TKey>, InMemoryStorage<T, TKey>>();
+            if (typeof(TKey) == typeof(string))
+            {
+                services.AddSingleton<IStringableRepositoryPattern<T>, InMemoryStringableStorage<T>>();
+                services.AddSingleton<IStringableCommandPattern<T>, InMemoryStringableStorage<T>>();
+                services.AddSingleton<IStringableQueryPattern<T>, InMemoryStringableStorage<T>>();
+            }
+            else if (typeof(TKey) == typeof(int))
+            {
+                services.AddSingleton<IIntableRepositoryPattern<T>, InMemoryIntableStorage<T>>();
+                services.AddSingleton<IIntableCommandPattern<T>, InMemoryIntableStorage<T>>();
+                services.AddSingleton<IIntableQueryPattern<T>, InMemoryIntableStorage<T>>();
+            }
+            else if (typeof(TKey) == typeof(long))
+            {
+                services.AddSingleton<ILongableRepositoryPattern<T>, InMemoryLongableStorage<T>>();
+                services.AddSingleton<ILongableCommandPattern<T>, InMemoryLongableStorage<T>>();
+                services.AddSingleton<ILongableQueryPattern<T>, InMemoryLongableStorage<T>>();
+            }
+            else if (typeof(TKey) == typeof(Guid))
+            {
+                services.AddSingleton<IGuidableRepositoryPattern<T>, InMemoryGuidableStorage<T>>();
+                services.AddSingleton<IGuidableCommandPattern<T>, InMemoryGuidableStorage<T>>();
+                services.AddSingleton<IGuidableRepositoryPattern<T>, InMemoryGuidableStorage<T>>();
+            }
+
             return new RepositoryPatternInMemoryBuilder<T, TKey>(services);
 
             static void Check(List<ExceptionOdds> odds)
