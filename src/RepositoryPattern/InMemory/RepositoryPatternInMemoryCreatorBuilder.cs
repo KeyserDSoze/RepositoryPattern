@@ -5,23 +5,25 @@ using System.Linq.Expressions;
 
 namespace RepositoryPattern
 {
-    public class RepositoryPatternInMemoryRegexBuilder<T, TKey>
+    public class RepositoryPatternInMemoryCreatorBuilder<T, TKey>
         where TKey : notnull
     {
         private readonly IServiceCollection _services;
         private readonly RepositoryPatternInMemoryBuilder<T, TKey> _builder;
-        public RepositoryPatternInMemoryRegexBuilder(IServiceCollection services,
+        public RepositoryPatternInMemoryCreatorBuilder(IServiceCollection services,
             RepositoryPatternInMemoryBuilder<T, TKey> builder)
         {
             _services = services;
             _builder = builder;
         }
-        public RepositoryPatternInMemoryRegexBuilder<T, TKey> WithPattern<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, params string[] regex)
-        {
-            string nameOfProperty = string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
+        private string GetNameOfProperty<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath)
+            => string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
                 .Replace("First().Value.", "Value.")
                 .Replace("First().Key.", "Key.")
                 .Replace("First().", string.Empty);
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithPattern<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, params string[] regex)
+        {
+            string nameOfProperty = GetNameOfProperty(navigationPropertyPath);
             var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].RegexForValueCreation;
             if (dictionary.ContainsKey(nameOfProperty))
                 dictionary[nameOfProperty] = regex;
@@ -29,12 +31,9 @@ namespace RepositoryPattern
                 dictionary.Add(nameOfProperty, regex);
             return this;
         }
-        public RepositoryPatternInMemoryRegexBuilder<T, TKey> WithValue<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, Func<TProperty> creator)
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithValue<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, Func<TProperty> creator)
         {
-            string nameOfProperty = string.Join(".", navigationPropertyPath.ToString().Split('.').Skip(1))
-                .Replace("First().Value.", string.Empty)
-                .Replace("First().Key.", string.Empty)
-                .Replace("First().", string.Empty);
+            string nameOfProperty = GetNameOfProperty(navigationPropertyPath);
             var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].DelegatedMethodForValueCreation;
             if (dictionary.ContainsKey(nameOfProperty))
                 dictionary[nameOfProperty] = () => creator.Invoke()!;
@@ -42,6 +41,18 @@ namespace RepositoryPattern
                 dictionary.Add(nameOfProperty, () => creator.Invoke()!);
             return this;
         }
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithImplementation<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, Type implementationType)
+        {
+            string nameOfProperty = GetNameOfProperty(navigationPropertyPath);
+            var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].ImplementationForValueCreation;
+            if (dictionary.ContainsKey(nameOfProperty))
+                dictionary[nameOfProperty] = implementationType;
+            else
+                dictionary.Add(nameOfProperty, implementationType);
+            return this;
+        }
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithImplementation<TProperty, TEntity>(Expression<Func<T, TProperty>> navigationPropertyPath) 
+            => WithImplementation(navigationPropertyPath, typeof(TEntity));
         public RepositoryPatternInMemoryBuilder<T, TKey> Populate(Expression<Func<T, TKey>> navigationKey, int numberOfElements = 100, int numberOfElementsWhenEnumerableIsFound = 10)
         {
             var nameOfKey = navigationKey.ToString().Split('.').Last();

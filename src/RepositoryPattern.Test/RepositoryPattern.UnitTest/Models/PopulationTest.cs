@@ -51,10 +51,19 @@ namespace RepositoryPattern.UnitTest.Models
         public IDictionary<string, InnerPopulation>? Y { get; set; }
         public InnerPopulation[]? W { get; set; }
         public ICollection<InnerPopulation>? J { get; set; }
+        public IInnerInterface? I { get; set; }
     }
     public class InnerPopulation
     {
         public string? A { get; set; }
         public int? B { get; set; }
+    }
+    public interface IInnerInterface
+    {
+        string A { get; set; }
+    }
+    public class MyInnerInterfaceImplementation : IInnerInterface
+    {
+        public string? A { get; set; }
     }
 }

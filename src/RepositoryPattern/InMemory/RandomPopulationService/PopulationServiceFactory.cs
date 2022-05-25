@@ -13,6 +13,9 @@ namespace RepositoryPattern.Data
             var regexDictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].RegexForValueCreation;
             if (regexDictionary.ContainsKey(treeName))
                 return new RegexPopulationService(regexDictionary[treeName]);
+            var implementationDictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].ImplementationForValueCreation;
+            if (implementationDictionary.ContainsKey(treeName))
+                return new ImplementationPopulationService(implementationDictionary[treeName], populationService);
             if (type == typeof(int) || type == typeof(int?))
                 return new NumberPopulationService(4, (x) => BitConverter.ToInt32(x));
             else if (type == typeof(uint) || type == typeof(uint?))

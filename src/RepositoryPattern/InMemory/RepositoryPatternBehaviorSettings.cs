@@ -14,5 +14,6 @@
         public List<ExceptionOdds> ExceptionOddsForWhere { get; } = new();
         public Dictionary<string, string[]> RegexForValueCreation { get; set; } = new();
         public Dictionary<string, Func<dynamic>> DelegatedMethodForValueCreation { get; set; } = new();
+        public Dictionary<string, Type> ImplementationForValueCreation { get; set; } = new();
     }
 }

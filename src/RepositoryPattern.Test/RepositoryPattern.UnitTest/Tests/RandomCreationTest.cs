@@ -85,6 +85,8 @@ namespace RepositoryPattern.UnitTest
                 Assert.Equal(check.Value.A,
                     regex.Matches(check!.Value!.A!).OrderByDescending(x => x.Length).First().Value);
             }
+            Assert.Equal(theFirst.I!.A!,
+                    regex.Matches(theFirst.I!.A!).OrderByDescending(x => x.Length).First().Value);
         }
         [Fact]
         public async Task TestWithRegexAsync()

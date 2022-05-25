@@ -21,7 +21,7 @@ namespace RepositoryPattern
             => _services!.AddRepositoryPatternInMemoryStorageWithLongKey<TNext>(settings);
         public RepositoryPatternInMemoryBuilder<TNext, int> AddRepositoryPatternInMemoryStorageWithIntKey<TNext>(Action<RepositoryPatternBehaviorSettings>? settings = default)
             => _services!.AddRepositoryPatternInMemoryStorageWithIntKey<TNext>(settings);
-        public RepositoryPatternInMemoryRegexBuilder<T, TKey> PopulateWithRandomData() 
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> PopulateWithRandomData() 
             => new(_services, this);
         public IServiceCollection Finalize()
             => _services!;
