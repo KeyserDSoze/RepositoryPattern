@@ -339,12 +339,49 @@ I have a 0.45% for normal Exception, 0.1% for "Big Exception" and 0.548% for "Gr
 You can set different range in milliseconds for each operation.
 In the code below I'm adding a same custom range for Delete, Insert, Update, Get between 1000ms and 2000ms, and a unique custom range for Query between 3000ms and 7000ms.
 
-    .AddRepositoryPatternInMemoryStorage<Solomon, string>(options =>
+     .AddRepositoryPatternInMemoryStorage<User, string>(options =>
+      {
+          var customRange = new Range(1000, 2000);
+          options.MillisecondsOfWaitForDelete = customRange;
+          options.MillisecondsOfWaitForInsert = customRange;
+          options.MillisecondsOfWaitForUpdate = customRange;
+          options.MillisecondsOfWaitForGet = customRange;
+          options.MillisecondsOfWaitForQuery = new Range(3000, 7000);
+      })   
+    
+### Add random waiting time before an exception
+You can set different range in milliseconds for each operation before to throw an exception.
+In the code below I'm adding a same custom range for Delete, Insert, Update, Get between 1000ms and 2000ms, and a unique custom range for Query between 3000ms and 7000ms in case of exception.
+
+    .AddRepositoryPatternInMemoryStorage<User, string>(options =>
     {
         var customRange = new Range(1000, 2000);
-        options.MillisecondsOfWaitForDelete = customRange;
-        options.MillisecondsOfWaitForInsert = customRange;
-        options.MillisecondsOfWaitForUpdate = customRange;
-        options.MillisecondsOfWaitForGet = customRange;
-        options.MillisecondsOfWaitForQuery = new Range(3000, 7000);
+        options.MillisecondsOfWaitBeforeExceptionForDelete = customRange;
+        options.MillisecondsOfWaitBeforeExceptionForInsert = customRange;
+        options.MillisecondsOfWaitBeforeExceptionForUpdate = customRange;
+        options.MillisecondsOfWaitBeforeExceptionForGet = customRange;
+        options.MillisecondsOfWaitBeforeExceptionForQuery = new Range(3000, 7000);
+        var customExceptions = new List<ExceptionOdds>
+        {
+            new ExceptionOdds()
+            {
+                Exception = new Exception(),
+                Percentage = 0.45
+            },
+            new ExceptionOdds()
+            {
+                Exception = new Exception("Big Exception"),
+                Percentage = 0.1
+            },
+            new ExceptionOdds()
+            {
+                Exception = new Exception("Great Exception"),
+                Percentage = 0.548
+            }
+        };
+        options.ExceptionOddsForDelete.AddRange(customExceptions);
+        options.ExceptionOddsForGet.AddRange(customExceptions);
+        options.ExceptionOddsForInsert.AddRange(customExceptions);
+        options.ExceptionOddsForUpdate.AddRange(customExceptions);
+        options.ExceptionOddsForQuery.AddRange(customExceptions);
     })
