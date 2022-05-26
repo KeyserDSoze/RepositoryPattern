@@ -353,7 +353,7 @@ In the code below I'm adding a same custom range for Delete, Insert, Update, Get
 You can set different range in milliseconds for each operation before to throw an exception.
 In the code below I'm adding a same custom range for Delete, Insert, Update, Get between 1000ms and 2000ms, and a unique custom range for Query between 3000ms and 7000ms in case of exception.
 
-    .AddRepositoryPatternInMemoryStorage<Solomon, string>(options =>
+    .AddRepositoryPatternInMemoryStorage<User, string>(options =>
     {
         var customRange = new Range(1000, 2000);
         options.MillisecondsOfWaitBeforeExceptionForDelete = customRange;
