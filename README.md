@@ -16,7 +16,7 @@
 ## Basic knowledge
 
 ### Interfaces
-Based on CQRS we could split our repository pattern in two main interfaces, one for update (write,delete) and one for read.
+Based on CQRS we could split our repository pattern in two main interfaces, one for update (write, delete) and one for read.
 
 #### Command (Write-Delete)
     public interface ICommandPattern<T, TKey>
