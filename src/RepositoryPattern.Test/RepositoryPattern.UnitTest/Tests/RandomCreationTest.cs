@@ -93,7 +93,7 @@ namespace RepositoryPattern.UnitTest
         {
             var all = await _population.QueryAsync();
             var theFirst = all.First();
-            Assert.Equal(90, all.Count);
+            Assert.Equal(90, all.Count());
             Assert.NotEqual(0, theFirst.A);
             Assert.NotNull(theFirst.AA);
             Assert.NotEqual((uint)0, theFirst.B);

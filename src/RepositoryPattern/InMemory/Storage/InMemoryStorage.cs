@@ -48,7 +48,10 @@ namespace RepositoryPattern
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForDelete));
             var exception = GetException(_settings.ExceptionOddsForDelete);
             if (exception != null)
+            {
+                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForDelete));
                 throw exception;
+            }
             if (_values.ContainsKey(key))
                 return _values.Remove(key);
             return false;
@@ -59,8 +62,11 @@ namespace RepositoryPattern
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForGet));
             var exception = GetException(_settings.ExceptionOddsForGet);
             if (exception != null)
+            {
+                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForGet));
                 throw exception;
-            return _values.ContainsKey(key) ? _values[key] : default(T);
+            }
+            return _values.ContainsKey(key) ? _values[key] : default;
         }
 
         public async Task<bool> InsertAsync(TKey key, T value)
@@ -68,7 +74,10 @@ namespace RepositoryPattern
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForInsert));
             var exception = GetException(_settings.ExceptionOddsForInsert);
             if (exception != null)
+            {
+                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForInsert));
                 throw exception;
+            }
             if (!_values.ContainsKey(key))
             {
                 _values.Add(key, value);
@@ -82,7 +91,10 @@ namespace RepositoryPattern
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForUpdate));
             var exception = GetException(_settings.ExceptionOddsForUpdate);
             if (exception != null)
+            {
+                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForUpdate));
                 throw exception;
+            }
             if (_values.ContainsKey(key))
             {
                 _values[key] = value;
@@ -92,16 +104,19 @@ namespace RepositoryPattern
                 return false;
         }
 
-        public async Task<List<T>> QueryAsync(Func<T, bool>? predicate = null, int? top = 0, int? skip = 0)
+        public async Task<IEnumerable<T>> QueryAsync(Func<T, bool>? predicate = null, int top = 0, int skip = 0)
         {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForWhere));
-            var exception = GetException(_settings.ExceptionOddsForWhere);
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForQuery));
+            var exception = GetException(_settings.ExceptionOddsForQuery);
             if (exception != null)
+            {
+                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForQuery));
                 throw exception;
+            }
             if (predicate == null)
-                return _values.Select(x => x.Value).ToList();
+                return _values.Select(x => x.Value);
             else
-                return _values.Select(x => x.Value).Where(predicate).ToList();
+                return _values.Select(x => x.Value).Where(predicate);
         }
     }
 }

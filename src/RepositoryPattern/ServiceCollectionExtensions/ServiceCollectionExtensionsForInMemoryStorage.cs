@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new RepositoryPatternBehaviorSettings();
             settings?.Invoke(options);
-            Check(options.ExceptionOddsForWhere);
+            Check(options.ExceptionOddsForQuery);
             Check(options.ExceptionOddsForInsert);
             Check(options.ExceptionOddsForUpdate);
             Check(options.ExceptionOddsForGet);

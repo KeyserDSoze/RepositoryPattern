@@ -1,4 +1,5 @@
 using RepositoryPattern.UnitTest.Models;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace RepositoryPattern.UnitTest
         public async Task TestAsync()
         {
             var users = await _user.QueryAsync();
-            Assert.True(users.Count == 100);
+            Assert.True(users.Count() == 100);
         }
     }
 }

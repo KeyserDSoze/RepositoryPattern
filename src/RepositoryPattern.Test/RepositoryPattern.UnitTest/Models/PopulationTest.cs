@@ -29,9 +29,7 @@ namespace RepositoryPattern.UnitTest.Models
         public double? NN { get; set; }
         public decimal O { get; set; }
         public decimal? OO { get; set; }
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public string P { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public string P { get; set; } = null!;
         public string? PP { get; set; }
         public bool Q { get; set; }
         public bool? QQ { get; set; }
@@ -64,6 +62,6 @@ namespace RepositoryPattern.UnitTest.Models
     }
     public class MyInnerInterfaceImplementation : IInnerInterface
     {
-        public string? A { get; set; }
+        public string A { get; set; } = null!;
     }
 }

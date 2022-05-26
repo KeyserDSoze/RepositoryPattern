@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RepositoryPattern.Data;
 using RepositoryPattern.Utility;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace RepositoryPattern
@@ -31,6 +32,16 @@ namespace RepositoryPattern
                 dictionary.Add(nameOfProperty, regex);
             return this;
         }
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithSpecificNumberOfElements<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, int numberOfElements) 
+        {
+            string nameOfProperty = GetNameOfProperty(navigationPropertyPath);
+            var dictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].NumberOfElements;
+            if (dictionary.ContainsKey(nameOfProperty))
+                dictionary[nameOfProperty] = numberOfElements;
+            else
+                dictionary.Add(nameOfProperty, numberOfElements);
+            return this;
+        }
         public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithValue<TProperty>(Expression<Func<T, TProperty>> navigationPropertyPath, Func<TProperty> creator)
         {
             string nameOfProperty = GetNameOfProperty(navigationPropertyPath);
@@ -51,7 +62,7 @@ namespace RepositoryPattern
                 dictionary.Add(nameOfProperty, implementationType);
             return this;
         }
-        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithImplementation<TProperty, TEntity>(Expression<Func<T, TProperty>> navigationPropertyPath) 
+        public RepositoryPatternInMemoryCreatorBuilder<T, TKey> WithImplementation<TProperty, TEntity>(Expression<Func<T, TProperty>> navigationPropertyPath)
             => WithImplementation(navigationPropertyPath, typeof(TEntity));
         public RepositoryPatternInMemoryBuilder<T, TKey> Populate(Expression<Func<T, TKey>> navigationKey, int numberOfElements = 100, int numberOfElementsWhenEnumerableIsFound = 10)
         {

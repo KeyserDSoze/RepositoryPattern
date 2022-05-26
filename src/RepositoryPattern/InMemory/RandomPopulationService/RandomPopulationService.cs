@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using RepositoryPattern.Utility;
+using System.Reflection;
 
 namespace RepositoryPattern.Data
 {
@@ -16,7 +17,13 @@ namespace RepositoryPattern.Data
             treeName = string.IsNullOrWhiteSpace(treeName) ? propertyName : (string.IsNullOrWhiteSpace(propertyName) ? treeName : $"{treeName}.{propertyName}");
             var service = _factory.GetService(type, this, treeName);
             if (service != default)
-                return service.GetValue(type, numberOfEntities, treeName);
+            {
+                int? overridedNumberOfEntities = null;
+                var numberOfEntitiesDictionary = RepositoryPatternInMemorySettingsFactory.Instance.Settings[Naming.Settings<T, TKey>()].NumberOfElements;
+                if (numberOfEntitiesDictionary.ContainsKey(treeName))
+                    overridedNumberOfEntities = numberOfEntitiesDictionary[treeName];
+                return service.GetValue(type, overridedNumberOfEntities ?? numberOfEntities, treeName);
+            }
             return default;
         }
     }

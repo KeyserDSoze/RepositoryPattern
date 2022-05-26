@@ -30,9 +30,10 @@ namespace RepositoryPattern.UnitTest
                     var readingRange = new Range(int.Parse(configuration["data_creation:delay_in_read_from"]),
                         int.Parse(configuration["data_creation:delay_in_read_to"]));
                     options.MillisecondsOfWaitForGet = readingRange;
-                    options.MillisecondsOfWaitForWhere = readingRange;
+                    options.MillisecondsOfWaitForQuery = readingRange;
                 })
                 .PopulateWithRandomData()
+                .WithPattern(x => x.Email, @"[a-z]{4,10}@gmail\.com")
                 .Populate(x => x.Id!, 100)
                 .AddRepositoryPatternInMemoryStorage<Car, string>(options =>
                 {
@@ -58,7 +59,7 @@ namespace RepositoryPattern.UnitTest
                     options.ExceptionOddsForGet.AddRange(customExceptions);
                     options.ExceptionOddsForInsert.AddRange(customExceptions);
                     options.ExceptionOddsForUpdate.AddRange(customExceptions);
-                    options.ExceptionOddsForWhere.AddRange(customExceptions);
+                    options.ExceptionOddsForQuery.AddRange(customExceptions);
                 })
                 .AddRepositoryPatternInMemoryStorageWithStringKey<PopulationTest>()
                 .PopulateWithRandomData()
