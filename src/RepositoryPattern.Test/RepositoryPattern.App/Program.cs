@@ -14,6 +14,10 @@ Console.WriteLine(generatedString);
 
 ServiceLocator
     .Create()
+    .AddRepositoryPatternInMemoryStorage<User, string>()
+    .PopulateWithRandomData(x => x.Id!)
+    .WithPattern(x => x.Email, "[a-z]{4,5}")
+    .And()
     .AddRepositoryPatternInMemoryStorage<Solomon, string>(options =>
     {
         var customRange = new Range(1000, 2000);
@@ -51,16 +55,16 @@ ServiceLocator
         options.ExceptionOddsForUpdate.AddRange(customExceptions);
         options.ExceptionOddsForQuery.AddRange(customExceptions);
     })
-    .PopulateWithRandomData()
+    .PopulateWithRandomData(x => x.Key!, 20)
     .WithPattern(x => x.Key, "[a-z]{4,16}")
     .WithPattern(x => x.Casualty!.Folder, "[a-z]{1,4}")
     .WithPattern(x => x.Headers, "", "[a-z]{3,4}")
     .WithPattern(x => x.Olaf, "[1-9]{3,4}")
     .WithValue(x => x.Z, () => new Range(new Index(1), new Index(2)))
-    .Populate(x => x.Key!, 20)
+    .And()
     .Finalize()
     .FinalizeWithoutDependencyInjection();
-
+ServiceLocator.GetService<IServiceProvider>().Populate();
 
 var storage = ServiceLocator.GetService<IRepositoryPattern<Solomon, string>>();
 await storage.InsertAsync("aaa", new());

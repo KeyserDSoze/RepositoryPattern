@@ -1,8 +1,9 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class GuidPopulationService : IPopulationService
+    internal class GuidPopulationService<T, TKey> : IGuidPopulationService<T, TKey>
+        where TKey : notnull
     {
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
             => Guid.NewGuid();
     }
 }

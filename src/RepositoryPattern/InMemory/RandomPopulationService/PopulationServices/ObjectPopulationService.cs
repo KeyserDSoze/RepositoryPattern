@@ -1,26 +1,26 @@
-﻿namespace RepositoryPattern.Data
+﻿using RepositoryPattern.Services;
+
+namespace RepositoryPattern.Population
 {
-    internal class ObjectPopulationService : IPopulationService
+    internal class ObjectPopulationService<T, TKey> : IClassPopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly IRandomPopulationService _populationService;
+        private readonly IInstanceCreator _instanceCreator;
 
-        public ObjectPopulationService(IRandomPopulationService populationService)
+        public ObjectPopulationService(IInstanceCreator instanceCreator)
         {
-            _populationService = populationService;
+            _instanceCreator = instanceCreator;
         }
-
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
             if (!type.IsInterface && !type.IsAbstract)
             {
-                var entity = Activator.CreateInstance(type);
+                var entity = _instanceCreator.CreateInstance(type, populationService, numberOfEntities, treeName);
                 try
                 {
                     var properties = type.GetProperties();
                     foreach (var property in properties)
-                    {
-                        property.SetValue(entity, _populationService.Construct(property, numberOfEntities, treeName));
-                    }
+                        property.SetValue(entity, populationService.Construct(property.PropertyType, numberOfEntities, treeName, property.Name));
                 }
                 catch
                 {

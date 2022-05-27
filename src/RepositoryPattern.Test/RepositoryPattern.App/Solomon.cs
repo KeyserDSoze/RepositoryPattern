@@ -11,7 +11,11 @@ namespace RepositoryPatternApp
     {
         public string? Id { get; set; }
         public string? Name { get; set; }
-        public string? Email { get; set; }
+        public string? Email { get; }
+        public User(string email)
+        {
+            Email = email;
+        }
     }
     public class UserWriter : ICommandPattern<User, string>
     {

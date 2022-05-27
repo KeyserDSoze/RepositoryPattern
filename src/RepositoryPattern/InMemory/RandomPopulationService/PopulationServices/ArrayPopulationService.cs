@@ -1,20 +1,14 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class ArrayPopulationService : IPopulationService
+    internal class ArrayPopulationService<T, TKey> : IArrayPopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly IRandomPopulationService _populationService;
-
-        public ArrayPopulationService(IRandomPopulationService populationService)
-        {
-            _populationService = populationService;
-        }
-
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
             var entity = Activator.CreateInstance(type, numberOfEntities);
             var valueType = type.GetElementType();
             for (int i = 0; i < numberOfEntities; i++)
-                (entity as dynamic)![i] = _populationService.Construct(valueType!, numberOfEntities, treeName, string.Empty);
+                (entity as dynamic)![i] = populationService.Construct(valueType!, numberOfEntities, treeName, string.Empty);
             return entity!;
         }
     }

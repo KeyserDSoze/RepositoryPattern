@@ -1,17 +1,11 @@
 ﻿using System.Collections;
 
-namespace RepositoryPattern.Data
+namespace RepositoryPattern.Population
 {
-    internal class DictionaryPopulationService : IPopulationService
-    {
-        private readonly IRandomPopulationService _populationService;
-
-        public DictionaryPopulationService(IRandomPopulationService populationService)
-        {
-            _populationService = populationService;
-        }
-
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+    internal class DictionaryPopulationService<T, TKey> : IDictionaryPopulationService<T, TKey>
+        where TKey : notnull
+    { 
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
             var keyType = type.GetGenericArguments().First();
             var valueType = type.GetGenericArguments().Last();
@@ -19,8 +13,8 @@ namespace RepositoryPattern.Data
             var entity = Activator.CreateInstance(dictionaryType)! as IDictionary;
             for (int i = 0; i < numberOfEntities; i++)
             {
-                var newKey = _populationService.Construct(type.GetGenericArguments().First(), numberOfEntities, treeName, "Key");
-                var newValue = _populationService.Construct(type.GetGenericArguments().Last(), numberOfEntities, treeName, "Value");
+                var newKey = populationService.Construct(type.GetGenericArguments().First(), numberOfEntities, treeName, "Key");
+                var newValue = populationService.Construct(type.GetGenericArguments().Last(), numberOfEntities, treeName, "Value");
                 entity!.Add(newKey, newValue);
             }
             return entity!;

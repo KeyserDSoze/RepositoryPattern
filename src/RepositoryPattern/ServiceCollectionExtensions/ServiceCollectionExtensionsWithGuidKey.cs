@@ -7,18 +7,25 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRepositoryPatternWithGuidKey<T, TStorage>(this IServiceCollection services,
            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
            where TStorage : class, IGuidableRepositoryPattern<T>
-               => services.AddRepositoryPattern<T, Guid, TStorage>(serviceLifetime);
+            => services
+                .AddServiceWithLifeTime<IGuidableRepositoryPattern<T>, TStorage>(serviceLifetime)
+                .AddRepositoryPattern<T, Guid, TStorage>(serviceLifetime);
+
         public static IServiceCollection AddCommandPatternWithGuidKey<T, TStorage>(this IServiceCollection services,
             ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
             where TStorage : class, IGuidableCommandPattern<T>
-                => services.AddCommandPattern<T, Guid, TStorage>(serviceLifetime);
+                => services
+                    .AddServiceWithLifeTime<IGuidableCommandPattern<T>, TStorage>(serviceLifetime)
+                    .AddCommandPattern<T, Guid, TStorage>(serviceLifetime);
         public static IServiceCollection AddQueryPatternWithGuidKey<T, TKey, TStorage>(this IServiceCollection services,
            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
            where TStorage : class, IGuidableQueryPattern<T>
-                => services.AddQueryPattern<T, Guid, TStorage>(serviceLifetime);
+                => services
+                    .AddServiceWithLifeTime<IGuidableQueryPattern<T>, TStorage>(serviceLifetime)
+                    .AddQueryPattern<T, Guid, TStorage>(serviceLifetime);
         public static RepositoryPatternInMemoryBuilder<T, Guid> AddRepositoryPatternInMemoryStorageWithGuidKey<T>(
             this IServiceCollection services,
-            Action<RepositoryPatternBehaviorSettings>? settings = default)
-        => services.AddRepositoryPatternInMemoryStorage<T, Guid>(settings);
+            Action<RepositoryPatternBehaviorSettings<T, Guid>>? settings = default)
+                => services.AddRepositoryPatternInMemoryStorage(settings);
     }
 }

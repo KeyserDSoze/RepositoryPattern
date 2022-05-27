@@ -5,13 +5,13 @@ namespace RepositoryPattern
     internal class InMemoryStorage<T, TKey> : IRepositoryPattern<T, TKey>
         where TKey : notnull
     {
-        private readonly RepositoryPatternBehaviorSettings _settings;
+        private readonly RepositoryPatternBehaviorSettings<T, TKey> _settings;
 
-        public InMemoryStorage(RepositoryPatternInMemorySettingsFactory settings)
+        public InMemoryStorage(RepositoryPatternBehaviorSettings<T, TKey> settings)
         {
-            _settings = settings.Settings[typeof(IRepositoryPattern<T, TKey>).FullName!];
+            _settings = settings;
         }
-        internal static readonly Dictionary<TKey, T> _values = new();
+        internal static Dictionary<TKey, T> Values { get; } = new();
         private static int GetRandomNumber(Range range)
         {
             int maxPlusOne = range.End.Value + 1 - range.Start.Value;
@@ -52,8 +52,8 @@ namespace RepositoryPattern
                 await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForDelete));
                 throw exception;
             }
-            if (_values.ContainsKey(key))
-                return _values.Remove(key);
+            if (Values.ContainsKey(key))
+                return Values.Remove(key);
             return false;
         }
 
@@ -66,7 +66,7 @@ namespace RepositoryPattern
                 await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForGet));
                 throw exception;
             }
-            return _values.ContainsKey(key) ? _values[key] : default;
+            return Values.ContainsKey(key) ? Values[key] : default;
         }
 
         public async Task<bool> InsertAsync(TKey key, T value)
@@ -78,9 +78,9 @@ namespace RepositoryPattern
                 await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForInsert));
                 throw exception;
             }
-            if (!_values.ContainsKey(key))
+            if (!Values.ContainsKey(key))
             {
-                _values.Add(key, value);
+                Values.Add(key, value);
                 return true;
             }
             else
@@ -95,9 +95,9 @@ namespace RepositoryPattern
                 await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForUpdate));
                 throw exception;
             }
-            if (_values.ContainsKey(key))
+            if (Values.ContainsKey(key))
             {
-                _values[key] = value;
+                Values[key] = value;
                 return true;
             }
             else
@@ -114,9 +114,9 @@ namespace RepositoryPattern
                 throw exception;
             }
             if (predicate == null)
-                return _values.Select(x => x.Value);
+                return Values.Select(x => x.Value);
             else
-                return _values.Select(x => x.Value).Where(predicate);
+                return Values.Select(x => x.Value).Where(predicate);
         }
     }
 }

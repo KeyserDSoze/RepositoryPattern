@@ -1,10 +1,8 @@
-﻿using System.Reflection;
-
-namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal interface IRandomPopulationService
+    public interface IRandomPopulationService<T, TKey>
+        where TKey : notnull
     {
-        dynamic? Construct(PropertyInfo propertyInfo, int numberOfEntities, string treeName);
-        dynamic? Construct(Type type, int numberOfEntities, string treeName, string propertyName);
+        dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args);
     }
 }

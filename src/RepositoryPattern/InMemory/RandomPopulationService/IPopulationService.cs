@@ -1,7 +1,10 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal interface IPopulationService
+    public interface IPopulationService
     {
-        dynamic GetValue(Type type, int numberOfEntities, string treeName);
+        dynamic? Construct(Type type, int numberOfEntities, string treeName, string name);
+    }
+    public interface IPopulationService<T, TKey> : IPopulationService
+    {
     }
 }

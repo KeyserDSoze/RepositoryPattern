@@ -1,14 +1,9 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class AbstractPopulationService : IPopulationService
+    internal class AbstractPopulationService<T, TKey> : IAbstractPopulationService<T, TKey>
+        where TKey : notnull
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "For future versions")]
-        private readonly IRandomPopulationService _populationService;
-        public AbstractPopulationService(IRandomPopulationService populationService)
-        {
-            _populationService = populationService;
-        }
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T,TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
             return null!;
         }

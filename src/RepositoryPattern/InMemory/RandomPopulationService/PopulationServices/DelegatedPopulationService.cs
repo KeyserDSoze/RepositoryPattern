@@ -1,13 +1,9 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class DelegatedPopulationService : IPopulationService
+    internal class DelegatedPopulationService<T, TKey> : IDelegatedPopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly Func<dynamic> _action;
-        public DelegatedPopulationService(Func<dynamic> action)
-        {
-            _action = action;
-        }
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
-            => _action.Invoke();
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
+            => args.Invoke();
     }
 }

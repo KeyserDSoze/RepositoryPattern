@@ -32,9 +32,9 @@ namespace RepositoryPattern.UnitTest
                     options.MillisecondsOfWaitForGet = readingRange;
                     options.MillisecondsOfWaitForQuery = readingRange;
                 })
-                .PopulateWithRandomData()
+                .PopulateWithRandomData(x => x.Id!, 100)
                 .WithPattern(x => x.Email, @"[a-z]{4,10}@gmail\.com")
-                .Populate(x => x.Id!, 100)
+                .And()
                 .AddRepositoryPatternInMemoryStorage<Car, string>(options =>
                 {
                     var customExceptions = new List<ExceptionOdds>
@@ -62,15 +62,15 @@ namespace RepositoryPattern.UnitTest
                     options.ExceptionOddsForQuery.AddRange(customExceptions);
                 })
                 .AddRepositoryPatternInMemoryStorageWithStringKey<PopulationTest>()
-                .PopulateWithRandomData()
+                .PopulateWithRandomData(x => x.P)
                 .WithPattern(x => x.J!.First().A, "[a-z]{4,5}")
                 .WithPattern(x => x.Y!.First().Value.A, "[a-z]{4,5}")
                 .WithImplementation(x => x.I, typeof(MyInnerInterfaceImplementation))
                 .WithPattern(x => x.I!.A!, "[a-z]{4,5}")
                 .WithImplementation<IInnerInterface, MyInnerInterfaceImplementation>(x => x.I!)
-                .Populate(x => x.P)
+                .And()
                 .AddRepositoryPatternInMemoryStorageWithStringKey<RegexPopulationTest>()
-                .PopulateWithRandomData()
+                .PopulateWithRandomData(x => x.P, 90, 8)
                 .WithPattern(x => x.A, "[1-9]{1,2}")
                 .WithPattern(x => x.AA, "[1-9]{1,2}")
                 .WithPattern(x => x.B, "[1-9]{1,2}")
@@ -112,9 +112,9 @@ namespace RepositoryPattern.UnitTest
                 .WithPattern(x => x.ZZ, "[1-9]{1,2}", "[1-9]{1,2}")
                 .WithPattern(x => x.J!.First().A, "[a-z]{4,5}")
                 .WithPattern(x => x.Y!.First().Value.A, "[a-z]{4,5}")
-                .Populate(x => x.P, 90, 8)
+                .And()
                 .AddRepositoryPatternInMemoryStorageWithStringKey<DelegationPopulation>()
-                .PopulateWithRandomData()
+                .PopulateWithRandomData(x => x.P)
                 .WithValue(x => x.A, () => 2)
                 .WithValue(x => x.AA, () => 2)
                 .WithValue(x => x.B, () => (uint)2)
@@ -167,9 +167,10 @@ namespace RepositoryPattern.UnitTest
                     }
                     return inners;
                 })
-                .Populate(x => x.P)
+                .And()
                 .Finalize()
                 .FinalizeWithoutDependencyInjection();
+                ServiceLocator.GetService<IServiceProvider>().Populate();
         }
     }
 }

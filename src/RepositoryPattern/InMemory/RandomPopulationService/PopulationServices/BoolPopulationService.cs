@@ -1,10 +1,11 @@
 ﻿using System.Security.Cryptography;
 
-namespace RepositoryPattern.Data
+namespace RepositoryPattern.Population
 {
-    internal class BoolPopulationService : IPopulationService
+    internal class BoolPopulationService<T, TKey> : IBoolPopulationService<T, TKey>
+        where TKey : notnull
     {
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
             => RandomNumberGenerator.GetInt32(4) > 1;
     }
 }

@@ -6,18 +6,17 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static RepositoryPatternInMemoryBuilder<T, TKey> AddRepositoryPatternInMemoryStorage<T, TKey>(
             this IServiceCollection services,
-            Action<RepositoryPatternBehaviorSettings>? settings = default)
+            Action<RepositoryPatternBehaviorSettings<T, TKey>>? settings = default)
             where TKey : notnull
         {
-            var options = new RepositoryPatternBehaviorSettings();
+            var options = new RepositoryPatternBehaviorSettings<T, TKey>();
             settings?.Invoke(options);
             Check(options.ExceptionOddsForQuery);
             Check(options.ExceptionOddsForInsert);
             Check(options.ExceptionOddsForUpdate);
             Check(options.ExceptionOddsForGet);
             Check(options.ExceptionOddsForDelete);
-            RepositoryPatternInMemorySettingsFactory.Instance.Settings.Add(typeof(IRepositoryPattern<T, TKey>).FullName!, options);
-            services.AddSingleton(RepositoryPatternInMemorySettingsFactory.Instance);
+            services.AddSingleton(options);
             services.AddSingleton<IRepositoryPattern<T, TKey>, InMemoryStorage<T, TKey>>();
             services.AddSingleton<ICommandPattern<T, TKey>, InMemoryStorage<T, TKey>>();
             services.AddSingleton<IQueryPattern<T, TKey>, InMemoryStorage<T, TKey>>();

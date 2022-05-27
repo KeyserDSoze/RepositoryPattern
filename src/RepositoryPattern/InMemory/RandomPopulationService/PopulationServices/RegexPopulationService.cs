@@ -1,21 +1,21 @@
 ﻿using Fare;
+using RepositoryPattern.Services;
 
-namespace RepositoryPattern.Data
+namespace RepositoryPattern.Population
 {
-    internal class RegexPopulationService : IPopulationService
+    internal class RegexPopulationService<T, TKey> : IRegexPopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly string[] _regexes;
-        public RegexPopulationService(string[] regexes)
+        private readonly IRegexService _regexService;
+        public RegexPopulationService(IRegexService regexService) 
+            => _regexService = regexService;
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
-            _regexes = regexes;
-        }
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
-        {
-            var seed = _regexes.First();
+            string[] regexes = args;
+            var seed = regexes.First();
             if (!string.IsNullOrWhiteSpace(seed))
             {
-                var xeger = new Xeger(seed);
-                var generatedString = xeger.Generate();
+                var generatedString = _regexService.GetRandomString(seed);
                 if (type.Name.Contains("Nullable`1"))
                     type = type.GenericTypeArguments[0];
                 if (type == typeof(Guid))
@@ -31,15 +31,10 @@ namespace RepositoryPattern.Data
                 else if (type == typeof(Range))
                 {
                     var first = int.Parse(generatedString);
-                    xeger = new Xeger(_regexes.Last());
-                    generatedString = xeger.Generate();
+                    generatedString = _regexService.GetRandomString(regexes.Last());
                     var second = int.Parse(generatedString);
                     if (first > second)
-                    {
-                        var lied = first;
-                        first = second;
-                        second = lied;
-                    }
+                        (second, first) = (first, second);
                     if (first == second)
                         second++;
                     return new Range(new Index(first), new Index(second));

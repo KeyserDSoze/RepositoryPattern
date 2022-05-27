@@ -1,17 +1,9 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class ImplementationPopulationService : IPopulationService
+    internal class ImplementationPopulationService<T, TKey> : IImplementationPopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly Type _implementationType;
-        private readonly IRandomPopulationService _populationService;
-
-        public ImplementationPopulationService(Type implementationType, IRandomPopulationService populationService)
-        {
-            _implementationType = implementationType;
-            _populationService = populationService;
-        }
-
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
-            => _populationService.Construct(_implementationType, numberOfEntities, treeName, string.Empty)!;
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
+            => populationService.Construct(args, numberOfEntities, treeName, string.Empty)!;
     }
 }

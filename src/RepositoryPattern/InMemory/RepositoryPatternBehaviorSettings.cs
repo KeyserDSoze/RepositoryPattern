@@ -1,6 +1,7 @@
 ﻿namespace RepositoryPattern
 {
-    public class RepositoryPatternBehaviorSettings
+    public class RepositoryPatternBehaviorSettings<T, TKey>
+        where TKey : notnull
     {
         public Range MillisecondsOfWaitForDelete { get; set; }
         public Range MillisecondsOfWaitForInsert { get; set; }
@@ -17,9 +18,5 @@
         public List<ExceptionOdds> ExceptionOddsForUpdate { get; } = new();
         public List<ExceptionOdds> ExceptionOddsForGet { get; } = new();
         public List<ExceptionOdds> ExceptionOddsForQuery { get; } = new();
-        public Dictionary<string, string[]> RegexForValueCreation { get; set; } = new();
-        public Dictionary<string, Func<dynamic>> DelegatedMethodForValueCreation { get; set; } = new();
-        public Dictionary<string, Type> ImplementationForValueCreation { get; set; } = new();
-        public Dictionary<string, int> NumberOfElements { get; set; } = new();
     }
 }

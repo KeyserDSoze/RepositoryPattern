@@ -1,18 +1,13 @@
-﻿namespace RepositoryPattern.Data
+﻿namespace RepositoryPattern.Population
 {
-    internal class RangePopulationService : IPopulationService
+    internal class RangePopulationService<T, TKey> : IRangePopulationService<T, TKey>
+        where TKey : notnull
     {
-        private readonly IRandomPopulationService _populationService;
-
-        public RangePopulationService(IRandomPopulationService populationService)
-        {
-            _populationService = populationService;
-        }
-        public dynamic GetValue(Type type, int numberOfEntities, string treeName)
+        public dynamic GetValue(Type type, IPopulationService<T, TKey> populationService, int numberOfEntities, string treeName, dynamic args)
         {
 
-            int firstNumber = _populationService.Construct(typeof(int), numberOfEntities, treeName, "X");
-            int secondNumber = _populationService.Construct(typeof(int), numberOfEntities, treeName, "Y");
+            int firstNumber = populationService.Construct(typeof(int), numberOfEntities, treeName, "X");
+            int secondNumber = populationService.Construct(typeof(int), numberOfEntities, treeName, "Y");
             if (firstNumber < 0)
                 firstNumber *= -1;
             if (secondNumber < 0)
