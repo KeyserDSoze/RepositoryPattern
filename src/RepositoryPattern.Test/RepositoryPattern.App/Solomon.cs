@@ -1,10 +1,5 @@
 ﻿using RepositoryPattern;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RepositoryPatternApp
 {
@@ -20,19 +15,19 @@ namespace RepositoryPatternApp
     }
     public class UserWriter : ICommandPattern<User, string>
     {
-        public Task<bool> DeleteAsync(string key)
+        public Task<bool> DeleteAsync(string key, CancellationToken cancellationToken = default)
         {
             //delete on with DB or storage context
             throw new NotImplementedException();
         }
 
-        public Task<bool> InsertAsync(string key, User value)
+        public Task<bool> InsertAsync(string key, User value, CancellationToken cancellationToken = default)
         {
             //insert on DB or storage context
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(string key, User value)
+        public Task<bool> UpdateAsync(string key, User value, CancellationToken cancellationToken = default)
         {
             //update on DB or storage context
             throw new NotImplementedException();
@@ -40,13 +35,13 @@ namespace RepositoryPatternApp
     }
     public class UserReader : IQueryPattern<User, string>
     {
-        public Task<User?> GetAsync(string key)
+        public Task<User?> GetAsync(string key, CancellationToken cancellationToken = default)
         {
             //get an item by key from DB or storage context
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null)
+        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             //get a list of items by a predicate with top and skip from DB or storage context
             throw new NotImplementedException();
@@ -54,27 +49,27 @@ namespace RepositoryPatternApp
     }
     public class UserRepository : IRepositoryPattern<User, string>, IQueryPattern<User, string>, ICommandPattern<User, string>
     {
-        public Task<bool> DeleteAsync(string key)
+        public Task<bool> DeleteAsync(string key, CancellationToken cancellationToken = default)
         {
             //delete on with DB or storage context
             throw new NotImplementedException();
         }
-        public Task<bool> InsertAsync(string key, User value)
+        public Task<bool> InsertAsync(string key, User value, CancellationToken cancellationToken = default)
         {
             //insert on DB or storage context
             throw new NotImplementedException();
         }
-        public Task<bool> UpdateAsync(string key, User value)
+        public Task<bool> UpdateAsync(string key, User value, CancellationToken cancellationToken = default)
         {
             //update on DB or storage context
             throw new NotImplementedException();
         }
-        public Task<User?> GetAsync(string key)
+        public Task<User?> GetAsync(string key, CancellationToken cancellationToken = default)
         {
             //get an item by key from DB or storage context
             throw new NotImplementedException();
         }
-        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null)
+        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var x = predicate!.ToString();

@@ -44,80 +44,130 @@ namespace RepositoryPattern
             }
             return default;
         }
-        public async Task<bool> DeleteAsync(TKey key)
+        public async Task<bool> DeleteAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForDelete));
-            var exception = GetException(_settings.ExceptionOddsForDelete);
-            if (exception != null)
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForDelete), cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForDelete));
-                throw exception;
-            }
-            if (Values.ContainsKey(key))
-                return Values.Remove(key);
-            return false;
-        }
-
-        public async Task<T?> GetAsync(TKey key)
-        {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForGet));
-            var exception = GetException(_settings.ExceptionOddsForGet);
-            if (exception != null)
-            {
-                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForGet));
-                throw exception;
-            }
-            return Values.ContainsKey(key) ? Values[key] : default;
-        }
-
-        public async Task<bool> InsertAsync(TKey key, T value)
-        {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForInsert));
-            var exception = GetException(_settings.ExceptionOddsForInsert);
-            if (exception != null)
-            {
-                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForInsert));
-                throw exception;
-            }
-            if (!Values.ContainsKey(key))
-            {
-                Values.Add(key, value);
-                return true;
+                var exception = GetException(_settings.ExceptionOddsForDelete);
+                if (exception != null)
+                {
+                    await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForDelete), cancellationToken);
+                    throw exception;
+                }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    if (Values.ContainsKey(key))
+                        return Values.Remove(key);
+                    return false;
+                }
+                else
+                    throw new TaskCanceledException();
             }
             else
-                return false;
-        }
-        public async Task<bool> UpdateAsync(TKey key, T value)
-        {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForUpdate));
-            var exception = GetException(_settings.ExceptionOddsForUpdate);
-            if (exception != null)
-            {
-                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForUpdate));
-                throw exception;
-            }
-            if (Values.ContainsKey(key))
-            {
-                Values[key] = value;
-                return true;
-            }
-            else
-                return false;
+                throw new TaskCanceledException();
         }
 
-        public async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>>? predicate = null, int? top = null, int? skip = null)
+        public async Task<T?> GetAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForQuery));
-            var exception = GetException(_settings.ExceptionOddsForQuery);
-            if (exception != null)
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForGet), cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForQuery));
-                throw exception;
+                var exception = GetException(_settings.ExceptionOddsForGet);
+                if (exception != null)
+                {
+                    await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForGet), cancellationToken);
+                    throw exception;
+                }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    return Values.ContainsKey(key) ? Values[key] : default;
+                }
+                else
+                    throw new TaskCanceledException();
             }
-            if (predicate == null)
-                return Values.Select(x => x.Value);
             else
-                return Values.Select(x => x.Value).Where(predicate.Compile());
+                throw new TaskCanceledException();
+        }
+
+        public async Task<bool> InsertAsync(TKey key, T value, CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForInsert), cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                var exception = GetException(_settings.ExceptionOddsForInsert);
+                if (exception != null)
+                {
+                    await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForInsert), cancellationToken);
+                    throw exception;
+                }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    if (!Values.ContainsKey(key))
+                    {
+                        Values.Add(key, value);
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    throw new TaskCanceledException();
+            }
+            else
+                throw new TaskCanceledException();
+        }
+        public async Task<bool> UpdateAsync(TKey key, T value, CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForUpdate), cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                var exception = GetException(_settings.ExceptionOddsForUpdate);
+                if (exception != null)
+                {
+                    await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForUpdate), cancellationToken);
+                    throw exception;
+                }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    if (Values.ContainsKey(key))
+                    {
+                        Values[key] = value;
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    throw new TaskCanceledException();
+            }
+            else
+                throw new TaskCanceledException();
+        }
+
+        public async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>>? predicate = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForQuery), cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                var exception = GetException(_settings.ExceptionOddsForQuery);
+                if (exception != null)
+                {
+                    await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitBeforeExceptionForQuery), cancellationToken);
+                    throw exception;
+                }
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    if (predicate == null)
+                        return Values.Select(x => x.Value);
+                    else
+                        return Values.Select(x => x.Value).Where(predicate.Compile());
+                }
+                else
+                    throw new TaskCanceledException();
+            }
+            else
+                throw new TaskCanceledException();
         }
     }
 }

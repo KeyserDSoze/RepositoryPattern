@@ -9,7 +9,7 @@ builder.Services.AddRepositoryPatternInMemoryStorageWithStringKey<User>(x =>
 {
 
 })
-    .PopulateWithRandomData(x => x.Email, 120, 5);
+    .PopulateWithRandomData(x => x.Email!, 120, 5);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
