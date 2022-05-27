@@ -8,21 +8,18 @@ namespace Microsoft.Extensions.DependencyInjection
            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
            where TStorage : class, IGuidableRepositoryPattern<T>
             => services
-                .AddServiceWithLifeTime<IGuidableRepositoryPattern<T>, TStorage>(serviceLifetime)
-                .AddRepositoryPattern<T, Guid, TStorage>(serviceLifetime);
+                .AddServiceWithLifeTime<IGuidableRepositoryPattern<T>, TStorage>(serviceLifetime);
 
         public static IServiceCollection AddCommandPatternWithGuidKey<T, TStorage>(this IServiceCollection services,
             ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
             where TStorage : class, IGuidableCommandPattern<T>
                 => services
-                    .AddServiceWithLifeTime<IGuidableCommandPattern<T>, TStorage>(serviceLifetime)
-                    .AddCommandPattern<T, Guid, TStorage>(serviceLifetime);
-        public static IServiceCollection AddQueryPatternWithGuidKey<T, TKey, TStorage>(this IServiceCollection services,
+                    .AddServiceWithLifeTime<IGuidableCommandPattern<T>, TStorage>(serviceLifetime);
+        public static IServiceCollection AddQueryPatternWithGuidKey<T, TStorage>(this IServiceCollection services,
            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
            where TStorage : class, IGuidableQueryPattern<T>
                 => services
-                    .AddServiceWithLifeTime<IGuidableQueryPattern<T>, TStorage>(serviceLifetime)
-                    .AddQueryPattern<T, Guid, TStorage>(serviceLifetime);
+                    .AddServiceWithLifeTime<IGuidableQueryPattern<T>, TStorage>(serviceLifetime);
         public static RepositoryPatternInMemoryBuilder<T, Guid> AddRepositoryPatternInMemoryStorageWithGuidKey<T>(
             this IServiceCollection services,
             Action<RepositoryPatternBehaviorSettings<T, Guid>>? settings = default)

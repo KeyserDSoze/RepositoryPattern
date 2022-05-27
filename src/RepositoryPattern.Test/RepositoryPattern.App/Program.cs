@@ -6,6 +6,7 @@ using RepositoryPatternApp;
 using Rystem;
 using System.Text.RegularExpressions;
 
+await new UserRepository().QueryAsync(x => x.Id == "A" && x.Email == "B");
 //string pattern = @"(?:2018|2019|2020|2021|2022)/(?:10|11|12)/(?:06|07|08) (00:00:00)";
 string pattern = @"[a-z]{4,10}@gmail\.com";
 var xeger = new Xeger(pattern);
@@ -64,7 +65,9 @@ ServiceLocator
     .And()
     .Finalize()
     .FinalizeWithoutDependencyInjection();
-ServiceLocator.GetService<IServiceProvider>().Populate();
+ServiceLocator.GetService<IServiceProvider>()
+    .Populate();
+WebApplicationExtensions.AddApiForRepositoryPattern(null!);
 
 var storage = ServiceLocator.GetService<IRepositoryPattern<Solomon, string>>();
 await storage.InsertAsync("aaa", new());

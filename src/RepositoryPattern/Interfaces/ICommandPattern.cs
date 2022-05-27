@@ -1,6 +1,7 @@
 ﻿namespace RepositoryPattern
 {
-    public interface ICommandPattern<T, TKey>
+    public interface ICommandPattern { }
+    public interface ICommandPattern<T, TKey> : ICommandPattern
         where TKey : notnull
     {
         Task<bool> InsertAsync(TKey key, T value);

@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace RepositoryPattern
 {
@@ -104,7 +105,7 @@ namespace RepositoryPattern
                 return false;
         }
 
-        public async Task<IEnumerable<T>> QueryAsync(Func<T, bool>? predicate = null, int top = 0, int skip = 0)
+        public async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>>? predicate = null, int? top = null, int? skip = null)
         {
             await Task.Delay(GetRandomNumber(_settings.MillisecondsOfWaitForQuery));
             var exception = GetException(_settings.ExceptionOddsForQuery);
@@ -116,7 +117,7 @@ namespace RepositoryPattern
             if (predicate == null)
                 return Values.Select(x => x.Value);
             else
-                return Values.Select(x => x.Value).Where(predicate);
+                return Values.Select(x => x.Value).Where(predicate.Compile());
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RepositoryPattern;
 using RepositoryPattern.Population;
 using RepositoryPattern.Services;
 using System.Collections;
 using System.Reflection;
 
-namespace RepositoryPattern
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {

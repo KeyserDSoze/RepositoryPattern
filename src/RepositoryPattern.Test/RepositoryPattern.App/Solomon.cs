@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,7 +46,7 @@ namespace RepositoryPatternApp
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<User>> QueryAsync(Func<User, bool>? predicate = null, int top = 0, int skip = 0)
+        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null)
         {
             //get a list of items by a predicate with top and skip from DB or storage context
             throw new NotImplementedException();
@@ -73,8 +74,11 @@ namespace RepositoryPatternApp
             //get an item by key from DB or storage context
             throw new NotImplementedException();
         }
-        public Task<IEnumerable<User>> QueryAsync(Func<User, bool>? predicate = null, int top = 0, int skip = 0)
+        public Task<IEnumerable<User>> QueryAsync(Expression<Func<User, bool>>? predicate = null, int? top = null, int? skip = null)
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+            var x = predicate!.ToString();
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             //get a list of items by a predicate with top and skip from DB or storage context
             throw new NotImplementedException();
         }

@@ -1,9 +1,12 @@
-﻿namespace RepositoryPattern
+﻿using System.Linq.Expressions;
+
+namespace RepositoryPattern
 {
-    public interface IQueryPattern<T, TKey>
+    public interface IQueryPattern { }
+    public interface IQueryPattern<T, TKey> : IQueryPattern
         where TKey : notnull
     {
         Task<T?> GetAsync(TKey key);
-        Task<IEnumerable<T>> QueryAsync(Func<T, bool>? predicate = null, int top = 0, int skip = 0);
+        Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>>? predicate = null, int? top = null, int? skip = null);
     }
 }
