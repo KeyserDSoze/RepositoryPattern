@@ -1,8 +1,10 @@
-# RepositoryPattern
+# Repository Framework
 
 ### Contribute: https://www.buymeacoffee.com/keyserdsoze
 
-**This library allows you to use correctly concepts like repository pattern, CQRS and DDD:**
+**Rystem.RepositoryFramework allows you to use correctly concepts like repository pattern, CQRS and DDD. You have interfaces for your domains, auto-generated api, auto-generated HttpClient to simplify connection "api to front-end", a functionality for auto-population in memory of your models, a functionality to simulate: exceptions and waiting time from external sources to improve your implementation/business test and load test.**
+
+**Document to read before to use this library:**
 - Repository pattern, useful links: 
   -   [Microsoft docs](https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application)
   -   [Repository pattern explained](https://codewithshadman.com/repository-pattern-csharp/)
